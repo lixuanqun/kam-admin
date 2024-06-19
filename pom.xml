@@ -8,19 +8,21 @@
 		<version>2.7.14</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.kam-dashboard</groupId>
+	<groupId>com.kam.dashboard</groupId>
 	<artifactId>kam-dashboard</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>kam-dashboard</name>
 	<description>Demo project for Spring Boot</description>
-    <modules>
-        <module>core</module>
+	<modules>
 		<module>dashboard</module>
-		<module>config</module>
-		<module>common</module>
+		<module>core</module>
+		<module>api</module>
+		<module>plugin</module>
 	</modules>
-    <properties>
+
+
+	<properties>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
