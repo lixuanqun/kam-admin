@@ -294,3 +294,247 @@ export function getActiveDialogs() {
 export function getSystemOverview() {
   return requestClient.get('/monitoring/overview');
 }
+
+// ========== 动态路由 ==========
+export function getDrGateways(params: any) {
+  return requestClient.get('/drouting/gateways', { params });
+}
+
+export function createDrGateway(data: any) {
+  return requestClient.post('/drouting/gateways', data);
+}
+
+export function updateDrGateway(id: number, data: any) {
+  return requestClient.patch(`/drouting/gateways/${id}`, data);
+}
+
+export function deleteDrGateway(id: number) {
+  return requestClient.delete(`/drouting/gateways/${id}`);
+}
+
+export function getDrRules(params: any) {
+  return requestClient.get('/drouting/rules', { params });
+}
+
+export function createDrRule(data: any) {
+  return requestClient.post('/drouting/rules', data);
+}
+
+export function updateDrRule(id: number, data: any) {
+  return requestClient.patch(`/drouting/rules/${id}`, data);
+}
+
+export function deleteDrRule(id: number) {
+  return requestClient.delete(`/drouting/rules/${id}`);
+}
+
+export function getDrGroups(params: any) {
+  return requestClient.get('/drouting/groups', { params });
+}
+
+export function getDrCarriers(params: any) {
+  return requestClient.get('/drouting/carriers', { params });
+}
+
+export function reloadDrouting() {
+  return requestClient.post('/drouting/reload');
+}
+
+export function getDrStats() {
+  return requestClient.get('/drouting/stats');
+}
+
+// ========== LCR 路由 ==========
+export function getLcrGateways(params: any) {
+  return requestClient.get('/lcr/gateways', { params });
+}
+
+export function getLcrRules(params: any) {
+  return requestClient.get('/lcr/rules', { params });
+}
+
+export function getLcrTargets(params: any) {
+  return requestClient.get('/lcr/targets', { params });
+}
+
+export function reloadLcr() {
+  return requestClient.post('/lcr/reload');
+}
+
+// ========== 对话管理 ==========
+export function getDialogs(params: any) {
+  return requestClient.get('/dialogs', { params });
+}
+
+export function getActiveDialogsList() {
+  return requestClient.get('/dialogs/active');
+}
+
+export function getDialogStats() {
+  return requestClient.get('/dialogs/stats');
+}
+
+export function endDialog(hashEntry: number, hashId: number) {
+  return requestClient.post('/dialogs/end', { hashEntry, hashId });
+}
+
+// ========== 哈希表 ==========
+export function getHtableRecords(params: any) {
+  return requestClient.get('/htable', { params });
+}
+
+export function getHtableValue(table: string, key: string) {
+  return requestClient.get('/htable/rpc/get', { params: { table, key } });
+}
+
+export function setHtableString(table: string, key: string, value: string) {
+  return requestClient.post('/htable/rpc/sets', { table, key, value });
+}
+
+export function deleteHtableKey(table: string, key: string) {
+  return requestClient.post('/htable/rpc/delete', { table, key });
+}
+
+export function dumpHtable(table: string) {
+  return requestClient.get('/htable/rpc/dump', { params: { table } });
+}
+
+export function reloadHtable(table: string) {
+  return requestClient.post('/htable/rpc/reload', { table });
+}
+
+// ========== 用户数据 ==========
+export function getAliases(params: any) {
+  return requestClient.get('/userdata/aliases', { params });
+}
+
+export function createAlias(data: any) {
+  return requestClient.post('/userdata/aliases', data);
+}
+
+export function deleteAlias(id: number) {
+  return requestClient.delete(`/userdata/aliases/${id}`);
+}
+
+export function getGroups(params: any) {
+  return requestClient.get('/userdata/groups', { params });
+}
+
+export function createGroup(data: any) {
+  return requestClient.post('/userdata/groups', data);
+}
+
+export function deleteGroup(id: number) {
+  return requestClient.delete(`/userdata/groups/${id}`);
+}
+
+export function getSpeedDials(params: any) {
+  return requestClient.get('/userdata/speed-dial', { params });
+}
+
+// ========== UAC 注册 ==========
+export function getUacRegistrations(params: any) {
+  return requestClient.get('/uac/registrations', { params });
+}
+
+export function createUacRegistration(data: any) {
+  return requestClient.post('/uac/registrations', data);
+}
+
+export function updateUacRegistration(id: number, data: any) {
+  return requestClient.patch(`/uac/registrations/${id}`, data);
+}
+
+export function deleteUacRegistration(id: number) {
+  return requestClient.delete(`/uac/registrations/${id}`);
+}
+
+export function reloadUac() {
+  return requestClient.post('/uac/reload');
+}
+
+export function getUacDump() {
+  return requestClient.get('/uac/dump');
+}
+
+// ========== RTPEngine ==========
+export function getRtpengineStatus() {
+  return requestClient.get('/rtpengine/status');
+}
+
+export function showRtpengine() {
+  return requestClient.get('/rtpengine/show');
+}
+
+export function reloadRtpengine() {
+  return requestClient.post('/rtpengine/reload');
+}
+
+export function enableRtpengine(url: string, flag: number) {
+  return requestClient.post('/rtpengine/enable', { url, flag });
+}
+
+// ========== 系统管理 ==========
+export function getSystemInfo() {
+  return requestClient.get('/system/info');
+}
+
+export function getSystemStatus() {
+  return requestClient.get('/system/status');
+}
+
+export function getSystemVersion() {
+  return requestClient.get('/system/version');
+}
+
+export function getSystemUptime() {
+  return requestClient.get('/system/uptime');
+}
+
+export function getSystemMemory() {
+  return requestClient.get('/system/memory');
+}
+
+export function getSystemProcesses() {
+  return requestClient.get('/system/processes');
+}
+
+export function getSystemModules() {
+  return requestClient.get('/system/modules');
+}
+
+export function getSystemStatistics(group?: string) {
+  return requestClient.get('/system/statistics', { params: { group } });
+}
+
+export function getTlsList() {
+  return requestClient.get('/system/tls/list');
+}
+
+export function getTlsInfo() {
+  return requestClient.get('/system/tls/info');
+}
+
+export function reloadTls() {
+  return requestClient.post('/system/tls/reload');
+}
+
+export function getPikeList() {
+  return requestClient.get('/system/pike/list');
+}
+
+export function getPikeTop(limit?: number) {
+  return requestClient.get('/system/pike/top', { params: { limit } });
+}
+
+export function getConfigList() {
+  return requestClient.get('/system/config/list');
+}
+
+export function getConfig(group: string, name: string) {
+  return requestClient.get('/system/config', { params: { group, name } });
+}
+
+export function setConfig(group: string, name: string, value: any) {
+  return requestClient.post('/system/config', { group, name, value });
+}

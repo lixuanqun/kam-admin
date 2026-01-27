@@ -19,6 +19,16 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { AccModule } from './modules/acc/acc.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
 
+// 新增模块
+import { DroutingModule } from './modules/drouting/drouting.module';
+import { LcrModule } from './modules/lcr/lcr.module';
+import { DialogModule } from './modules/dialog/dialog.module';
+import { HtableModule } from './modules/htable/htable.module';
+import { UserdataModule } from './modules/userdata/userdata.module';
+import { UacModule } from './modules/uac/uac.module';
+import { RtpengineModule } from './modules/rtpengine/rtpengine.module';
+import { SystemModule } from './modules/system/system.module';
+
 @Module({
   imports: [
     // 配置模块
@@ -48,7 +58,7 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
     // 公共模块
     CommonModule,
     
-    // 业务模块
+    // 核心业务模块
     SubscriberModule,
     DomainModule,
     DispatcherModule,
@@ -56,6 +66,22 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
     PermissionsModule,
     AccModule,
     MonitoringModule,
+    
+    // 路由模块
+    DroutingModule,
+    LcrModule,
+    
+    // 对话与缓存
+    DialogModule,
+    HtableModule,
+    
+    // 用户数据
+    UserdataModule,
+    UacModule,
+    
+    // 媒体与系统
+    RtpengineModule,
+    SystemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
