@@ -48,6 +48,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/kamailio/lcr/index.vue'),
         meta: { icon: 'lucide:dollar-sign', title: 'LCR 路由' },
       },
+      {
+        name: 'KamailioCarrierroute',
+        path: '/kamailio/carrierroute',
+        component: () => import('#/views/kamailio/carrierroute/index.vue'),
+        meta: { icon: 'lucide:truck', title: '运营商路由' },
+      },
       // 实时监控
       {
         name: 'KamailioLocations',
@@ -68,12 +74,18 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/kamailio/permissions/index.vue'),
         meta: { icon: 'lucide:shield', title: '权限管理' },
       },
-      // 计费
+      // 计费与跟踪
       {
         name: 'KamailioCdr',
         path: '/kamailio/cdr',
         component: () => import('#/views/kamailio/cdr/index.vue'),
         meta: { icon: 'lucide:file-text', title: 'CDR 记录' },
+      },
+      {
+        name: 'KamailioSiptrace',
+        path: '/kamailio/siptrace',
+        component: () => import('#/views/kamailio/siptrace/index.vue'),
+        meta: { icon: 'lucide:search', title: 'SIP 跟踪' },
       },
       // 高级功能
       {
@@ -87,6 +99,18 @@ const routes: RouteRecordRaw[] = [
         path: '/kamailio/htable',
         component: () => import('#/views/kamailio/htable/index.vue'),
         meta: { icon: 'lucide:database', title: '哈希表' },
+      },
+      {
+        name: 'KamailioPresence',
+        path: '/kamailio/presence',
+        component: () => import('#/views/kamailio/presence/index.vue'),
+        meta: { icon: 'lucide:eye', title: '存在服务' },
+      },
+      {
+        name: 'KamailioMsilo',
+        path: '/kamailio/msilo',
+        component: () => import('#/views/kamailio/msilo/index.vue'),
+        meta: { icon: 'lucide:mail', title: '离线消息' },
       },
       {
         name: 'KamailioRtpengine',

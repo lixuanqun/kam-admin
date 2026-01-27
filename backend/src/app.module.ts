@@ -19,13 +19,27 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { AccModule } from './modules/acc/acc.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
 
-// 新增模块
+// 路由模块
 import { DroutingModule } from './modules/drouting/drouting.module';
 import { LcrModule } from './modules/lcr/lcr.module';
+import { CarrierrouteModule } from './modules/carrierroute/carrierroute.module';
+
+// 对话与缓存
 import { DialogModule } from './modules/dialog/dialog.module';
 import { HtableModule } from './modules/htable/htable.module';
+
+// 用户数据
 import { UserdataModule } from './modules/userdata/userdata.module';
 import { UacModule } from './modules/uac/uac.module';
+
+// 存在服务与消息
+import { PresenceModule } from './modules/presence/presence.module';
+import { MsiloModule } from './modules/msilo/msilo.module';
+
+// 跟踪与调试
+import { SiptraceModule } from './modules/siptrace/siptrace.module';
+
+// 媒体与系统
 import { RtpengineModule } from './modules/rtpengine/rtpengine.module';
 import { SystemModule } from './modules/system/system.module';
 
@@ -70,6 +84,7 @@ import { SystemModule } from './modules/system/system.module';
     // 路由模块
     DroutingModule,
     LcrModule,
+    CarrierrouteModule,
     
     // 对话与缓存
     DialogModule,
@@ -78,6 +93,13 @@ import { SystemModule } from './modules/system/system.module';
     // 用户数据
     UserdataModule,
     UacModule,
+    
+    // 存在服务与消息
+    PresenceModule,
+    MsiloModule,
+    
+    // 跟踪与调试
+    SiptraceModule,
     
     // 媒体与系统
     RtpengineModule,

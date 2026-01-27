@@ -538,3 +538,95 @@ export function getConfig(group: string, name: string) {
 export function setConfig(group: string, name: string, value: any) {
   return requestClient.post('/system/config', { group, name, value });
 }
+
+// ========== 存在服务 ==========
+export function getPresentities(params: any) {
+  return requestClient.get('/presence/presentities', { params });
+}
+
+export function getWatchers(params: any) {
+  return requestClient.get('/presence/watchers', { params });
+}
+
+export function cleanupPresence() {
+  return requestClient.post('/presence/cleanup');
+}
+
+export function getPresenceStats() {
+  return requestClient.get('/presence/stats');
+}
+
+// ========== 离线消息 ==========
+export function getMsiloMessages(params: any) {
+  return requestClient.get('/msilo', { params });
+}
+
+export function getMsiloByUser(username: string, domain: string) {
+  return requestClient.get('/msilo/user', { params: { username, domain } });
+}
+
+export function deleteMsiloMessage(id: number) {
+  return requestClient.delete(`/msilo/${id}`);
+}
+
+export function cleanupMsilo() {
+  return requestClient.post('/msilo/cleanup');
+}
+
+export function getMsiloStats() {
+  return requestClient.get('/msilo/stats');
+}
+
+// ========== SIP 跟踪 ==========
+export function getSipTraces(params: any) {
+  return requestClient.get('/siptrace', { params });
+}
+
+export function getSipTraceByCallId(callid: string) {
+  return requestClient.get('/siptrace/call', { params: { callid } });
+}
+
+export function getSipTraceStats() {
+  return requestClient.get('/siptrace/stats');
+}
+
+export function cleanupSipTrace(days: number) {
+  return requestClient.post('/siptrace/cleanup', { days });
+}
+
+// ========== 运营商路由 ==========
+export function getCarrierNames() {
+  return requestClient.get('/carrierroute/carriers');
+}
+
+export function createCarrierName(carrier: string) {
+  return requestClient.post('/carrierroute/carriers', { carrier });
+}
+
+export function deleteCarrierName(id: number) {
+  return requestClient.delete(`/carrierroute/carriers/${id}`);
+}
+
+export function getCarrierDomains() {
+  return requestClient.get('/carrierroute/domains');
+}
+
+export function createCarrierDomain(domain: string) {
+  return requestClient.post('/carrierroute/domains', { domain });
+}
+
+export function deleteCarrierDomain(id: number) {
+  return requestClient.delete(`/carrierroute/domains/${id}`);
+}
+
+export function getCarrierFailureRoutes(params: any) {
+  return requestClient.get('/carrierroute/failure-routes', { params });
+}
+
+export function reloadCarrierroute() {
+  return requestClient.post('/carrierroute/reload');
+}
+
+export function dumpCarrierRoutes() {
+  return requestClient.get('/carrierroute/dump');
+}
