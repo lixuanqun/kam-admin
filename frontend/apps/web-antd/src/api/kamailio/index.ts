@@ -630,3 +630,126 @@ export function reloadCarrierroute() {
 export function dumpCarrierRoutes() {
   return requestClient.get('/carrierroute/dump');
 }
+
+// ========== 拨号计划 ==========
+export function getDialplanRules(params: any) {
+  return requestClient.get('/dialplan', { params });
+}
+
+export function createDialplanRule(data: any) {
+  return requestClient.post('/dialplan', data);
+}
+
+export function updateDialplanRule(id: number, data: any) {
+  return requestClient.patch(`/dialplan/${id}`, data);
+}
+
+export function deleteDialplanRule(id: number) {
+  return requestClient.delete(`/dialplan/${id}`);
+}
+
+export function reloadDialplan() {
+  return requestClient.post('/dialplan/reload');
+}
+
+export function translateDialplan(dpid: number, input: string) {
+  return requestClient.get('/dialplan/translate', { params: { dpid, input } });
+}
+
+// ========== Mtree ==========
+export function getMtreeRecords(params: any) {
+  return requestClient.get('/mtree', { params });
+}
+
+export function createMtreeRecord(data: any) {
+  return requestClient.post('/mtree', data);
+}
+
+export function deleteMtreeRecord(id: number) {
+  return requestClient.delete(`/mtree/${id}`);
+}
+
+export function reloadMtree(tname: string) {
+  return requestClient.post('/mtree/reload', { tname });
+}
+
+// ========== PDT ==========
+export function getPdtRecords(params: any) {
+  return requestClient.get('/pdt', { params });
+}
+
+export function createPdtRecord(data: any) {
+  return requestClient.post('/pdt', data);
+}
+
+export function deletePdtRecord(id: number) {
+  return requestClient.delete(`/pdt/${id}`);
+}
+
+export function reloadPdt() {
+  return requestClient.post('/pdt/reload');
+}
+
+// ========== Topos ==========
+export function getToposDialogs(params: any) {
+  return requestClient.get('/topos/dialogs', { params });
+}
+
+export function cleanupTopos(days: number) {
+  return requestClient.post('/topos/cleanup', { days });
+}
+
+// ========== 安全过滤 ==========
+export function getSecfilterRules(params: any) {
+  return requestClient.get('/secfilter', { params });
+}
+
+export function createSecfilterRule(data: any) {
+  return requestClient.post('/secfilter', data);
+}
+
+export function deleteSecfilterRule(id: number) {
+  return requestClient.delete(`/secfilter/${id}`);
+}
+
+export function reloadSecfilter() {
+  return requestClient.post('/secfilter/reload');
+}
+
+export function getSecfilterStats() {
+  return requestClient.get('/secfilter/stats');
+}
+
+export function addSecfilterBlacklist(type: number, data: string) {
+  return requestClient.post('/secfilter/add-bl', { type, data });
+}
+
+export function addSecfilterWhitelist(type: number, data: string) {
+  return requestClient.post('/secfilter/add-wl', { type, data });
+}
+
+// ========== 用户偏好 ==========
+export function getUsrPreferences(params: any) {
+  return requestClient.get('/usrpreferences', { params });
+}
+
+export function getUserPreferences(username: string, domain: string) {
+  return requestClient.get('/usrpreferences/user', { params: { username, domain } });
+}
+
+export function createUsrPreference(data: any) {
+  return requestClient.post('/usrpreferences', data);
+}
+
+export function deleteUsrPreference(id: number) {
+  return requestClient.delete(`/usrpreferences/${id}`);
+}
+
+// ========== 数据库版本 ==========
+export function getDbVersions() {
+  return requestClient.get('/version');
+}
+
+export function getDbVersionStats() {
+  return requestClient.get('/version/stats');
+}

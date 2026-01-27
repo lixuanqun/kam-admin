@@ -29,6 +29,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/kamailio/userdata/index.vue'),
         meta: { icon: 'lucide:user-cog', title: '用户数据' },
       },
+      {
+        name: 'KamailioUsrpreferences',
+        path: '/kamailio/usrpreferences',
+        component: () => import('#/views/kamailio/usrpreferences/index.vue'),
+        meta: { icon: 'lucide:sliders', title: '用户偏好' },
+      },
       // 路由管理
       {
         name: 'KamailioDispatchers',
@@ -54,6 +60,24 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/kamailio/carrierroute/index.vue'),
         meta: { icon: 'lucide:truck', title: '运营商路由' },
       },
+      {
+        name: 'KamailioDialplan',
+        path: '/kamailio/dialplan',
+        component: () => import('#/views/kamailio/dialplan/index.vue'),
+        meta: { icon: 'lucide:replace', title: '拨号计划' },
+      },
+      {
+        name: 'KamailioMtree',
+        path: '/kamailio/mtree',
+        component: () => import('#/views/kamailio/mtree/index.vue'),
+        meta: { icon: 'lucide:binary', title: '内存树' },
+      },
+      {
+        name: 'KamailioPdt',
+        path: '/kamailio/pdt',
+        component: () => import('#/views/kamailio/pdt/index.vue'),
+        meta: { icon: 'lucide:shuffle', title: '前缀域转换' },
+      },
       // 实时监控
       {
         name: 'KamailioLocations',
@@ -74,6 +98,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/kamailio/permissions/index.vue'),
         meta: { icon: 'lucide:shield', title: '权限管理' },
       },
+      {
+        name: 'KamailioSecfilter',
+        path: '/kamailio/secfilter',
+        component: () => import('#/views/kamailio/secfilter/index.vue'),
+        meta: { icon: 'lucide:shield-alert', title: '安全过滤' },
+      },
       // 计费与跟踪
       {
         name: 'KamailioCdr',
@@ -86,6 +116,12 @@ const routes: RouteRecordRaw[] = [
         path: '/kamailio/siptrace',
         component: () => import('#/views/kamailio/siptrace/index.vue'),
         meta: { icon: 'lucide:search', title: 'SIP 跟踪' },
+      },
+      {
+        name: 'KamailioTopos',
+        path: '/kamailio/topos',
+        component: () => import('#/views/kamailio/topos/index.vue'),
+        meta: { icon: 'lucide:layers', title: '拓扑隐藏' },
       },
       // 高级功能
       {
@@ -130,6 +166,12 @@ const routes: RouteRecordRaw[] = [
         path: '/kamailio/monitoring',
         component: () => import('#/views/kamailio/monitoring/index.vue'),
         meta: { icon: 'lucide:activity', title: '监控面板' },
+      },
+      {
+        name: 'KamailioVersion',
+        path: '/kamailio/version',
+        component: () => import('#/views/kamailio/version/index.vue'),
+        meta: { icon: 'lucide:info', title: '数据库版本' },
       },
     ],
   },
