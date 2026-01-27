@@ -1,33 +1,63 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Dependencies
+node_modules/
+.pnpm-store/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Build outputs
+dist/
+build/
+.output/
+.nuxt/
+.next/
 
-### IntelliJ IDEA ###
-.idea
+# IDE
+.vscode/
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-### VS Code ###
-.vscode/
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.development
+!.env.production
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.turbo/
+
+# TypeScript
+*.tsbuildinfo
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Editor directories and files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
