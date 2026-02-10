@@ -1,19 +1,19 @@
 {
   "name": "kam-dashboard",
   "version": "1.0.0",
-  "description": "基于 NestJS + Vue Vben Admin 的全栈管理后台项目",
+  "description": "基于 NestJS + Arco Design Pro Vue 的全栈管理后台项目",
   "private": true,
   "scripts": {
     "backend:dev": "npm run start:dev --prefix backend",
     "backend:build": "npm run build --prefix backend",
     "backend:start": "npm run start:prod --prefix backend",
-    "frontend:dev": "pnpm --dir frontend run dev",
-    "frontend:build": "pnpm --dir frontend run build"
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build"
   },
   "keywords": [
     "nestjs",
     "vue",
-    "vben-admin",
+    "arco-design",
     "typescript",
     "full-stack"
   ],
