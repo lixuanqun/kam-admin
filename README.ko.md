@@ -1,7 +1,7 @@
 # Kamailio Dashboard
 
 <p align="center">
-  <b>NestJS + Vue Vben Admin 기반 Kamailio 풀스택 관리 대시보드</b>
+  <b>NestJS + Arco Design Pro Vue 기반 Kamailio 풀스택 관리 대시보드</b>
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 ### 요구 사항
 
 - Node.js >= 18.0.0
-- pnpm >= 8.0.0
+- npm >= 8.0.0
 - MySQL 5.7+ / MariaDB 10.x
 - Kamailio 5.x (JSONRPC 활성화)
 
@@ -55,8 +55,8 @@ npm run start:dev
 
 ```bash
 cd frontend
-pnpm install
-pnpm run dev:antd
+npm install
+npm run dev
 ```
 
 ### 접속 URL
@@ -70,7 +70,7 @@ pnpm run dev:antd
 ```
 .
 ├── backend/          # NestJS 백엔드 서비스
-├── frontend/         # Vue Vben Admin 프론트엔드
+├── frontend/         # Arco Design Pro Vue 프론트엔드
 ├── docs/             # 문서
 └── README.md
 ```
@@ -80,8 +80,8 @@ pnpm run dev:antd
 | 계층 | 기술 |
 |------|------|
 | 백엔드 | NestJS, TypeORM, MySQL |
-| 프론트엔드 | Vue 3, Vite, Ant Design Vue |
-| 템플릿 | Vue Vben Admin |
+| 프론트엔드 | Vue 3, Vite, Arco Design Vue |
+| 템플릿 | Arco Design Pro Vue |
 
 ## 문서
 

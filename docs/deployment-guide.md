@@ -21,7 +21,7 @@
 | 软件 | 版本 |
 |------|------|
 | Node.js | >= 18.0.0 |
-| pnpm | >= 8.0.0 |
+| npm | >= 8.0.0 |
 | MySQL/MariaDB | 5.7+ / 10.x |
 | Kamailio | 5.x |
 | Nginx | 1.18+ (可选) |
@@ -125,31 +125,31 @@ systemctl start kam-dashboard-api
 
 ```bash
 cd kam-admin/frontend
-pnpm install
+npm install
 ```
 
 ### 3.2 配置环境
 
-编辑 `apps/web-antd/.env.production`：
+编辑 `.env.production`：
 
 ```env
-VITE_GLOB_API_URL=https://api.example.com
+VITE_API_BASE_URL=/api
 ```
 
 ### 3.3 构建项目
 
 ```bash
-pnpm run build:antd
+npm run build
 ```
 
-构建产物位于 `apps/web-antd/dist` 目录。
+构建产物位于 `dist` 目录。
 
 ### 3.4 部署到 Nginx
 
 **复制文件：**
 
 ```bash
-cp -r apps/web-antd/dist/* /var/www/kam-dashboard/
+cp -r dist/* /var/www/kam-dashboard/
 ```
 
 **Nginx 配置：**
@@ -529,13 +529,13 @@ cd /opt/kam-admin/frontend
 git pull origin main
 
 # 安装依赖
-pnpm install
+npm install
 
 # 构建
-pnpm run build:antd
+npm run build
 
 # 部署
-cp -r apps/web-antd/dist/* /var/www/kam-dashboard/
+cp -r dist/* /var/www/kam-dashboard/
 ```
 
 ### 11.3 回滚

@@ -1,7 +1,7 @@
 # Kamailio Dashboard
 
 <p align="center">
-  <b>基於 NestJS + Vue Vben Admin 的 Kamailio 全端管理後台</b>
+  <b>基於 NestJS + Arco Design Pro Vue 的 Kamailio 全端管理後台</b>
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 ### 環境要求
 
 - Node.js >= 18.0.0
-- pnpm >= 8.0.0
+- npm >= 8.0.0
 - MySQL 5.7+ / MariaDB 10.x
 - Kamailio 5.x（已啟用 JSONRPC）
 
@@ -55,8 +55,8 @@ npm run start:dev
 
 ```bash
 cd frontend
-pnpm install
-pnpm run dev:antd
+npm install
+npm run dev
 ```
 
 ### 存取網址
@@ -70,7 +70,7 @@ pnpm run dev:antd
 ```
 .
 ├── backend/          # NestJS 後端服務
-├── frontend/         # Vue Vben Admin 前端應用
+├── frontend/         # Arco Design Pro Vue 前端應用
 ├── docs/             # 文件
 └── README.md
 ```
@@ -80,8 +80,8 @@ pnpm run dev:antd
 | 層級 | 技術 |
 |------|------|
 | 後端 | NestJS, TypeORM, MySQL |
-| 前端 | Vue 3, Vite, Ant Design Vue |
-| 範本 | Vue Vben Admin |
+| 前端 | Vue 3, Vite, Arco Design Vue |
+| 範本 | Arco Design Pro Vue |
 
 ## 文件
 

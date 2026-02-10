@@ -38,7 +38,7 @@
 ### Voraussetzungen
 
 - Node.js >= 18.0.0
-- pnpm >= 8.0.0
+- npm >= 8.0.0
 - MySQL 5.7+ / MariaDB 10.x
 - Kamailio 5.x (mit aktiviertem JSONRPC)
 
@@ -55,8 +55,8 @@ npm run start:dev
 
 ```bash
 cd frontend
-pnpm install
-pnpm run dev:antd
+npm install
+npm run dev
 ```
 
 ### Zugriffs-URLs
@@ -70,7 +70,7 @@ pnpm run dev:antd
 ```
 .
 ├── backend/          # NestJS-Backend-Service
-├── frontend/         # Vue Vben Admin Frontend
+├── frontend/         # Arco Design Pro Vue Frontend
 ├── docs/             # Dokumentation
 └── README.md
 ```
@@ -80,8 +80,8 @@ pnpm run dev:antd
 | Schicht | Technologie |
 |---------|-------------|
 | Backend | NestJS, TypeORM, MySQL |
-| Frontend | Vue 3, Vite, Ant Design Vue |
-| Vorlage | Vue Vben Admin |
+| Frontend | Vue 3, Vite, Arco Design Vue |
+| Vorlage | Arco Design Pro Vue |
 
 ## Dokumentation
 
