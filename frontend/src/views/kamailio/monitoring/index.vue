@@ -64,7 +64,9 @@
         </a-col>
         <a-col :span="6">
           <a-card>
-            <a-statistic title="运行时间" :value="formatUptime(health.uptime)" />
+            <a-statistic title="运行时间">
+              <template #value>{{ formatUptime(health.uptime) }}</template>
+            </a-statistic>
           </a-card>
         </a-col>
       </a-row>
