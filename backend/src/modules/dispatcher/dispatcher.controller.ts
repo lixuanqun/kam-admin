@@ -106,4 +106,14 @@ export class DispatcherController {
     await this.dispatcherService.reload();
     return ApiResponseDto.success(null, '重载成功');
   }
+
+  @Post('set-state')
+  @ApiOperation({ summary: '设置调度目标状态 (a=active,i=inactive,p=probing,d=disabled,t=trying)' })
+  @ApiResponse({ status: 200, description: '设置成功' })
+  async setState(
+    @Body() body: { state: string; group: number; address: string },
+  ): Promise<ApiResponseDto> {
+    await this.dispatcherService.setState(body.state, body.group, body.address);
+    return ApiResponseDto.success(null, '状态设置成功');
+  }
 }

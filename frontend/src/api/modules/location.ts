@@ -6,3 +6,5 @@ export const getLocations = (params: { page?: number; limit?: number; keyword?: 
 export const getLocationStats = () => request.get('/locations/stats');
 export const getOnlineCount = () => request.get('/locations/online-count');
 export const deleteUserLocation = (username: string, domain: string) => request.delete(`/locations/${username}/${domain}`);
+export const lookupUser = (table: string, aor: string) => request.get('/locations/lookup', { params: { table, aor } });
+export const deleteContact = (table: string, aor: string, contact: string) => request.delete('/locations/contact', { data: { table, aor, contact } });

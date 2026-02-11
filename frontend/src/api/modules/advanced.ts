@@ -7,6 +7,7 @@ export const setHtableString = (table: string, key: string, value: string) => re
 export const deleteHtableKey = (table: string, key: string) => request.post('/htable/rpc/delete', { table, key });
 export const dumpHtable = (table: string) => request.get('/htable/rpc/dump', { params: { table } });
 export const reloadHtable = (table: string) => request.post('/htable/rpc/reload', { table });
+export const getHtableStats = () => request.get('/htable/rpc/stats');
 
 // ===== 用户数据 =====
 export const getAliases = (params: any) => request.get('/userdata/aliases', { params });
@@ -24,6 +25,8 @@ export const updateUacRegistration = (id: number, data: any) => request.patch(`/
 export const deleteUacRegistration = (id: number) => request.delete(`/uac/registrations/${id}`);
 export const reloadUac = () => request.post('/uac/reload');
 export const getUacDump = () => request.get('/uac/dump');
+export const getUacInfo = (lUuid: string) => request.get(`/uac/info/${lUuid}`);
+export const refreshUac = (lUuid: string) => request.post(`/uac/refresh/${lUuid}`);
 
 // ===== 用户偏好 =====
 export const getUsrPreferences = (params: any) => request.get('/usrpreferences', { params });
@@ -36,6 +39,7 @@ export const getPresentities = (params: any) => request.get('/presence/presentit
 export const getWatchers = (params: any) => request.get('/presence/watchers', { params });
 export const cleanupPresence = () => request.post('/presence/cleanup');
 export const getPresenceStats = () => request.get('/presence/stats');
+export const refreshWatchers = (presentityUri: string, event: string) => request.post('/presence/refresh-watchers', { presentityUri, event });
 
 // ===== 离线消息 =====
 export const getMsiloMessages = (params: any) => request.get('/msilo', { params });
@@ -43,3 +47,4 @@ export const getMsiloByUser = (username: string, domain: string) => request.get(
 export const deleteMsiloMessage = (id: number) => request.delete(`/msilo/${id}`);
 export const cleanupMsilo = () => request.post('/msilo/cleanup');
 export const getMsiloStats = () => request.get('/msilo/stats');
+export const dumpMsilo = () => request.post('/msilo/dump');

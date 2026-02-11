@@ -3,7 +3,10 @@
     <a-card title="UAC 注册管理" class="general-card">
       <template #extra><a-space><a-input v-model="keyword" placeholder="搜索用户名" :style="{width:'200px'}" @press-enter="handleSearch"><template #suffix><icon-search @click="handleSearch" style="cursor:pointer" /></template></a-input><a-button type="primary" @click="handleAdd"><template #icon><icon-plus /></template>新增</a-button><a-button @click="loadData"><template #icon><icon-refresh /></template>刷新</a-button><a-button @click="handleReload"><template #icon><icon-sync /></template>重载</a-button><a-button @click="handleDump">导出内存</a-button></a-space></template>
       <a-table :columns="columns" :data="data" :loading="loading" :pagination="{total:pagination.total,current:pagination.current,pageSize:pagination.pageSize,showTotal:true}" row-key="id" @page-change="(p:number)=>{pagination.current=p;loadData()}">
-        <template #action="{record}"><a-space><a-button type="text" size="small" @click="handleEdit(record)"><template #icon><icon-edit /></template></a-button><a-popconfirm content="确定删除？" @ok="handleDelete(record.id)"><a-button type="text" status="danger" size="small"><template #icon><icon-delete /></template></a-button></a-popconfirm></a-space></template>
+        <template #action="{record}"><a-space><a-button type="text" size="small" @click="handleEdit(record)"><template #icon><icon-edit /></template></a-button>
+              <a-button type="text" size="small" @click="handleInfo(record.lUuid)"><template #icon><icon-eye /></template></a-button>
+              <a-button type="text" size="small" @click="handleRefresh(record.lUuid)"><template #icon><icon-refresh /></template></a-button>
+              <a-popconfirm content="确定删除？" @ok="handleDelete(record.id)"><a-button type="text" status="danger" size="small"><template #icon><icon-delete /></template></a-button></a-popconfirm></a-space></template>
       </a-table>
     </a-card>
     <a-modal v-model:visible="modalVisible" :title="editingId?'编辑注册':'新增注册'" :width="600" @ok="handleSubmit">
@@ -26,7 +29,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import { Message } from '@arco-design/web-vue';
-import { getUacRegistrations, createUacRegistration, updateUacRegistration, deleteUacRegistration, reloadUac, getUacDump } from '@/api/kamailio';
+import { getUacRegistrations, createUacRegistration, updateUacRegistration, deleteUacRegistration, reloadUac, getUacDump, getUacInfo, refreshUac } from '@/api/kamailio';
 const loading = ref(false); const data = ref<any[]>([]); const pagination = reactive({current:1,pageSize:20,total:0}); const keyword = ref('');
 const modalVisible = ref(false); const editingId = ref<number|null>(null); const formRef = ref();
 const formState = reactive({lUuid:'',lUsername:'',lDomain:'',rUsername:'',rDomain:'',realm:'',authUsername:'',authPassword:'',authProxy:'',expires:3600,flags:0,regDelay:0,contactAddr:'',socket:''});
@@ -40,5 +43,7 @@ async function handleDelete(id:number){await deleteUacRegistration(id);Message.s
 async function handleSubmit(){const e=await formRef.value?.validate();if(e)return;if(editingId.value){await updateUacRegistration(editingId.value,formState);Message.success('更新成功');}else{await createUacRegistration(formState);Message.success('创建成功');}modalVisible.value=false;loadData();}
 async function handleReload(){await reloadUac();Message.success('重载成功');}
 async function handleDump(){const r=await getUacDump();dumpData.value=r.data?.data;dumpVisible.value=true;}
+async function handleInfo(lUuid:string){try{const r=await getUacInfo(lUuid);dumpData.value=r.data?.data;dumpVisible.value=true;}catch{Message.error('查询失败');}}
+async function handleRefresh(lUuid:string){try{await refreshUac(lUuid);Message.success('刷新成功');}catch{Message.error('刷新失败');}}
 onMounted(()=>loadData());
 </script>

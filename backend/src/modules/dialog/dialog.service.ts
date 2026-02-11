@@ -42,6 +42,14 @@ export class DialogService {
     await this.kamailioRpcService.call('dlg.end_dlg', [hashEntry, hashId]);
   }
 
+  async getDialogDetail(hashEntry: number, hashId: number): Promise<any> {
+    return this.kamailioRpcService.call('dlg.dlg_list', [hashEntry, hashId]);
+  }
+
+  async bridgeDialog(from: string, to: string): Promise<void> {
+    await this.kamailioRpcService.call('dlg.bridge_dlg', [from, to]);
+  }
+
   async getStats(): Promise<any> {
     const dbCount = await this.dialogRepository.count();
     const memStats = await this.getDialogStats();

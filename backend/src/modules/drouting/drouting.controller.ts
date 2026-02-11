@@ -139,4 +139,16 @@ export class DroutingController {
     const stats = await this.droutingService.getStats();
     return ApiResponseDto.success(stats);
   }
+
+  @Get('gw-status')
+  @ApiOperation({ summary: '获取网关实时状态' })
+  async getGwStatus(): Promise<ApiResponseDto> {
+    return ApiResponseDto.success(await this.droutingService.getGwStatus());
+  }
+
+  @Get('carrier-status')
+  @ApiOperation({ summary: '获取运营商实时状态' })
+  async getCarrierStatus(): Promise<ApiResponseDto> {
+    return ApiResponseDto.success(await this.droutingService.getCarrierStatus());
+  }
 }

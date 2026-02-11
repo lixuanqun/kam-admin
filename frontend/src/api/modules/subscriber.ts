@@ -29,3 +29,4 @@ export const createSubscriber = (data: CreateSubscriberDto) => request.post('/su
 export const updateSubscriber = (id: number, data: UpdateSubscriberDto) => request.patch(`/subscribers/${id}`, data);
 export const deleteSubscriber = (id: number) => request.delete(`/subscribers/${id}`);
 export const getSubscriberStats = () => request.get('/subscribers/stats');
+export const batchDeleteSubscribers = (ids: number[]) => request.post('/subscribers/batch-delete', { ids });

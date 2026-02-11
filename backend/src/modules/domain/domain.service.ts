@@ -123,4 +123,11 @@ export class DomainService {
   async reload(): Promise<void> {
     await this.kamailioRpcService.reloadDomain();
   }
+
+  /**
+   * 导出内存中的域列表 (RPC domain.dump)
+   */
+  async dump(): Promise<any> {
+    return this.kamailioRpcService.call('domain.dump');
+  }
 }

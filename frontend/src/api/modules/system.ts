@@ -23,6 +23,8 @@ export const getRtpengineStatus = () => request.get('/rtpengine/status');
 export const showRtpengine = () => request.get('/rtpengine/show');
 export const reloadRtpengine = () => request.post('/rtpengine/reload');
 export const enableRtpengine = (url: string, flag: number) => request.post('/rtpengine/enable', { url, flag });
+export const pingRtpengine = (url: string) => request.post('/rtpengine/ping', { url });
+export const enableNatPing = (flag: number) => request.post('/rtpengine/nat-ping', { flag });
 
 // ===== 安全过滤 =====
 export const getSecfilterRules = (params: any) => request.get('/secfilter', { params });
@@ -32,6 +34,8 @@ export const reloadSecfilter = () => request.post('/secfilter/reload');
 export const getSecfilterStats = () => request.get('/secfilter/stats');
 export const addSecfilterBlacklist = (type: number, data: string) => request.post('/secfilter/add-bl', { type, data });
 export const addSecfilterWhitelist = (type: number, data: string) => request.post('/secfilter/add-wl', { type, data });
+export const printSecfilterRules = () => request.get('/secfilter/print');
+export const resetSecfilterStats = () => request.post('/secfilter/stats/reset');
 
 // ===== SIP 跟踪 =====
 export const getSipTraces = (params: any) => request.get('/siptrace', { params });
@@ -46,3 +50,5 @@ export const cleanupTopos = (days: number) => request.post('/topos/cleanup', { d
 // ===== 数据库版本 =====
 export const getDbVersions = () => request.get('/version');
 export const getDbVersionStats = () => request.get('/version/stats');
+export const getSystemConfigDiff = () => request.get('/system/config/diff');
+export const clearSystemStatistics = (name: string) => request.post('/system/statistics/clear', { name });

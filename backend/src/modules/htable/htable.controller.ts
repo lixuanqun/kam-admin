@@ -77,4 +77,10 @@ export class HtableController {
   async listTables() {
     return ApiResponseDto.success(await this.htableService.listTables());
   }
+
+  @Get('rpc/stats')
+  @ApiOperation({ summary: '获取哈希表统计' })
+  async stats() {
+    return ApiResponseDto.success(await this.htableService.stats());
+  }
 }

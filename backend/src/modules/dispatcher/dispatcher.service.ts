@@ -138,6 +138,16 @@ export class DispatcherService {
   }
 
   /**
+   * 设置调度目标状态
+   * @param state - 状态值: 'a' (active), 'i' (inactive), 'p' (probing), 'd' (disabled), 't' (trying)
+   * @param group - 调度组 ID
+   * @param address - 目标地址
+   */
+  async setState(state: string, group: number, address: string): Promise<void> {
+    await this.kamailioRpcService.call('dispatcher.set_state', [state, group, address]);
+  }
+
+  /**
    * 获取统计信息
    */
   async getStats(): Promise<{ total: number; groups: { setid: number; count: number }[] }> {

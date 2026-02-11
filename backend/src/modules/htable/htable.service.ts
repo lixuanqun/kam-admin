@@ -68,4 +68,8 @@ export class HtableService {
   async listTables(): Promise<any> {
     return this.kamailioRpcService.call('htable.listTables');
   }
+
+  async stats(): Promise<any> {
+    return this.kamailioRpcService.call('htable.stats');
+  }
 }

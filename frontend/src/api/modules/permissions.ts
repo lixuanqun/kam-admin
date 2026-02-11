@@ -12,3 +12,6 @@ export const createTrusted = (data: Partial<Trusted>) => request.post('/permissi
 export const updateTrusted = (id: number, data: Partial<Trusted>) => request.patch(`/permissions/trusted/${id}`, data);
 export const deleteTrusted = (id: number) => request.delete(`/permissions/trusted/${id}`);
 export const reloadPermissions = () => request.post('/permissions/reload');
+export const reloadTrustedPermissions = () => request.post('/permissions/reload-trusted');
+export const addressDump = () => request.get('/permissions/address-dump');
+export const subnetDump = () => request.get('/permissions/subnet-dump');

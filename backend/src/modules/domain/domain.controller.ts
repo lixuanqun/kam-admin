@@ -80,4 +80,10 @@ export class DomainController {
     await this.domainService.reload();
     return ApiResponseDto.success(null, '重载成功');
   }
+
+  @Get('dump')
+  @ApiOperation({ summary: '导出内存域列表 (RPC domain.dump)' })
+  async dump(): Promise<ApiResponseDto> {
+    return ApiResponseDto.success(await this.domainService.dump());
+  }
 }

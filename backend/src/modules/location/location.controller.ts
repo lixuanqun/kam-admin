@@ -65,4 +65,22 @@ export class LocationController {
     await this.locationService.deleteUserLocation(username, domain);
     return ApiResponseDto.success(null, '删除成功');
   }
+
+  @Get('lookup')
+  @ApiOperation({ summary: '精确查找指定用户注册 (RPC ul.lookup)' })
+  async lookupUser(
+    @Query('table') table: string,
+    @Query('aor') aor: string,
+  ): Promise<ApiResponseDto> {
+    return ApiResponseDto.success(await this.locationService.lookupUser(table || 'location', aor));
+  }
+
+  @Delete('contact')
+  @ApiOperation({ summary: '删除指定联系地址 (RPC ul.rm_contact)' })
+  async deleteContact(
+    @Body() body: { table: string; aor: string; contact: string },
+  ): Promise<ApiResponseDto> {
+    await this.locationService.deleteContact(body.table || 'location', body.aor, body.contact);
+    return ApiResponseDto.success(null, '删除成功');
+  }
 }

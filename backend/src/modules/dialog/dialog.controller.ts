@@ -33,4 +33,17 @@ export class DialogController {
     await this.dialogService.endDialog(body.hashEntry, body.hashId);
     return ApiResponseDto.success(null, '对话已结束');
   }
+
+  @Get('detail')
+  @ApiOperation({ summary: '获取对话详情 (RPC dlg.dlg_list)' })
+  async getDialogDetail(@Query('hashEntry') hashEntry: number, @Query('hashId') hashId: number) {
+    return ApiResponseDto.success(await this.dialogService.getDialogDetail(hashEntry, hashId));
+  }
+
+  @Post('bridge')
+  @ApiOperation({ summary: '桥接/转接对话 (RPC dlg.bridge_dlg)' })
+  async bridgeDialog(@Body() body: { from: string; to: string }) {
+    await this.dialogService.bridgeDialog(body.from, body.to);
+    return ApiResponseDto.success(null, '桥接成功');
+  }
 }

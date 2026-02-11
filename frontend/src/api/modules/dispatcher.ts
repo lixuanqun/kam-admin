@@ -11,3 +11,4 @@ export const deleteDispatcher = (id: number) => request.delete(`/dispatchers/${i
 export const reloadDispatchers = () => request.post('/dispatchers/reload');
 export const getDispatcherStats = () => request.get('/dispatchers/stats');
 export const getDispatcherStatus = () => request.get('/dispatchers/status');
+export const setDispatcherState = (state: string, group: number, address: string) => request.post('/dispatchers/set-state', { state, group, address });

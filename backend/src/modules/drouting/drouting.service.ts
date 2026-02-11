@@ -155,6 +155,14 @@ export class DroutingService {
     await this.kamailioRpcService.call('drouting.reload');
   }
 
+  async getGwStatus(): Promise<any> {
+    return this.kamailioRpcService.call('drouting.gw_status');
+  }
+
+  async getCarrierStatus(): Promise<any> {
+    return this.kamailioRpcService.call('drouting.carrier_status');
+  }
+
   async getStats(): Promise<any> {
     const gateways = await this.gatewayRepository.count();
     const rules = await this.ruleRepository.count();

@@ -55,11 +55,25 @@ export class LocationService {
   }
 
   /**
-   * 删除用户注册
+   * 删除用户注册（整个 AOR）
    */
   async deleteUserLocation(username: string, domain: string): Promise<void> {
     const aor = `sip:${username}@${domain}`;
     await this.kamailioRpcService.deleteUserLocation('location', aor);
+  }
+
+  /**
+   * 精确查找指定用户的注册 (RPC ul.lookup)
+   */
+  async lookupUser(table: string, aor: string): Promise<any> {
+    return this.kamailioRpcService.call('ul.lookup', [table, aor]);
+  }
+
+  /**
+   * 删除指定联系地址 (RPC ul.rm_contact)
+   */
+  async deleteContact(table: string, aor: string, contact: string): Promise<void> {
+    await this.kamailioRpcService.call('ul.rm_contact', [table, aor, contact]);
   }
 
   /**

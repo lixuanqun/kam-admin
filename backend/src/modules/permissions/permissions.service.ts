@@ -136,6 +136,18 @@ export class PermissionsService {
     await this.kamailioRpcService.reloadPermissions();
   }
 
+  async reloadTrusted(): Promise<void> {
+    await this.kamailioRpcService.call('permissions.trustedReload');
+  }
+
+  async addressDump(): Promise<any> {
+    return this.kamailioRpcService.call('permissions.addressDump');
+  }
+
+  async subnetDump(): Promise<any> {
+    return this.kamailioRpcService.call('permissions.subnetDump');
+  }
+
   async getStats(): Promise<{
     addressCount: number;
     trustedCount: number;

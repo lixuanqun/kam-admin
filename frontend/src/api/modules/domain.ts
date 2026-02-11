@@ -10,3 +10,4 @@ export const createDomain = (data: CreateDomainDto) => request.post('/domains', 
 export const updateDomain = (id: number, data: Partial<CreateDomainDto>) => request.patch(`/domains/${id}`, data);
 export const deleteDomain = (id: number) => request.delete(`/domains/${id}`);
 export const reloadDomains = () => request.post('/domains/reload');
+export const dumpDomains = () => request.get('/domains/dump');

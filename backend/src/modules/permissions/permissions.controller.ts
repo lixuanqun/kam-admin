@@ -116,4 +116,23 @@ export class PermissionsController {
     const stats = await this.permissionsService.getStats();
     return ApiResponseDto.success(stats);
   }
+
+  @Post('reload-trusted')
+  @ApiOperation({ summary: '重载信任源表' })
+  async reloadTrusted(): Promise<ApiResponseDto> {
+    await this.permissionsService.reloadTrusted();
+    return ApiResponseDto.success(null, '重载成功');
+  }
+
+  @Get('address-dump')
+  @ApiOperation({ summary: '导出内存地址表' })
+  async addressDump(): Promise<ApiResponseDto> {
+    return ApiResponseDto.success(await this.permissionsService.addressDump());
+  }
+
+  @Get('subnet-dump')
+  @ApiOperation({ summary: '导出内存子网表' })
+  async subnetDump(): Promise<ApiResponseDto> {
+    return ApiResponseDto.success(await this.permissionsService.subnetDump());
+  }
 }

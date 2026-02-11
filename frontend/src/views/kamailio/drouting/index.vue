@@ -34,6 +34,29 @@
             </template>
           </a-table>
         </a-tab-pane>
+
+        <a-tab-pane key="groups" title="分组">
+          <a-space style="margin-bottom:16px">
+            <a-button @click="loadGroups"><template #icon><icon-refresh /></template>刷新</a-button>
+          </a-space>
+          <a-table :columns="groupColumns" :data="groupData" :loading="groupLoading" :pagination="{total:groupPagination.total,current:groupPagination.current,pageSize:groupPagination.pageSize,showTotal:true}" row-key="id" @page-change="(p:number)=>{groupPagination.current=p;loadGroups()}" />
+        </a-tab-pane>
+
+        <a-tab-pane key="carriers" title="运营商">
+          <a-space style="margin-bottom:16px">
+            <a-button @click="loadCarriers"><template #icon><icon-refresh /></template>刷新</a-button>
+          </a-space>
+          <a-table :columns="carrierColumns" :data="carrierData" :loading="carrierLoading" :pagination="{total:carrierPagination.total,current:carrierPagination.current,pageSize:carrierPagination.pageSize,showTotal:true}" row-key="id" @page-change="(p:number)=>{carrierPagination.current=p;loadCarriers()}" />
+        </a-tab-pane>
+
+        <a-tab-pane key="status" title="实时状态">
+          <a-space style="margin-bottom:16px">
+            <a-button @click="loadGwStatusData"><template #icon><icon-refresh /></template>刷新网关状态</a-button>
+          </a-space>
+          <a-card title="网关状态" class="general-card" v-if="gwStatusData">
+            <pre style="max-height:300px;overflow:auto;background:var(--color-fill-2);padding:16px;border-radius:4px">{{ JSON.stringify(gwStatusData,null,2) }}</pre>
+          </a-card>
+        </a-tab-pane>
       </a-tabs>
     </a-card>
     <a-modal v-model:visible="gwModalVisible" :title="gwEditingId?'编辑网关':'新增网关'" @ok="handleGwSubmit">
@@ -60,7 +83,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import { Message } from '@arco-design/web-vue';
-import { getDrGateways, createDrGateway, updateDrGateway, deleteDrGateway, getDrRules, createDrRule, updateDrRule, deleteDrRule, reloadDrouting, getDrStats } from '@/api/kamailio';
+import { getDrGateways, createDrGateway, updateDrGateway, deleteDrGateway, getDrRules, createDrRule, updateDrRule, deleteDrRule, getDrGroups, getDrCarriers, reloadDrouting, getDrStats, getDrGwStatus } from '@/api/kamailio';
 
 const activeTab = ref('gateways');
 const stats = ref({ gateways: 0, rules: 0, groups: 0, carriers: 0 });
@@ -85,6 +108,20 @@ function handleRuleAdd() { ruleEditingId.value=null; Object.assign(ruleFormState
 function handleRuleEdit(r:any) { ruleEditingId.value=r.ruleid; Object.assign(ruleFormState,r); ruleModalVisible.value=true; }
 async function handleRuleDelete(id:number) { await deleteDrRule(id); Message.success('删除成功'); loadRules(); loadStats(); }
 async function handleRuleSubmit() { const e=await ruleFormRef.value?.validate(); if(e)return; if(ruleEditingId.value){await updateDrRule(ruleEditingId.value,ruleFormState);Message.success('更新成功');}else{await createDrRule(ruleFormState);Message.success('创建成功');} ruleModalVisible.value=false; loadRules(); loadStats(); }
+
+// Groups
+const groupLoading = ref(false); const groupData = ref<any[]>([]); const groupPagination = reactive({current:1,pageSize:20,total:0});
+const groupColumns = [{title:'ID',dataIndex:'id',width:60},{title:'用户名',dataIndex:'username'},{title:'域',dataIndex:'domain'},{title:'分组ID',dataIndex:'groupid',width:80},{title:'描述',dataIndex:'description'}];
+async function loadGroups(){groupLoading.value=true;try{const r=await getDrGroups({page:groupPagination.current,limit:groupPagination.pageSize});if(r.data?.code===0){groupData.value=r.data.data.items;groupPagination.total=r.data.data.total;}}finally{groupLoading.value=false;}}
+
+// Carriers
+const carrierLoading = ref(false); const carrierData = ref<any[]>([]); const carrierPagination = reactive({current:1,pageSize:20,total:0});
+const carrierColumns = [{title:'ID',dataIndex:'id',width:60},{title:'运营商ID',dataIndex:'carrierid'},{title:'网关列表',dataIndex:'gwlist'},{title:'标志',dataIndex:'flags',width:80},{title:'属性',dataIndex:'attrs'}];
+async function loadCarriers(){carrierLoading.value=true;try{const r=await getDrCarriers({page:carrierPagination.current,limit:carrierPagination.pageSize});if(r.data?.code===0){carrierData.value=r.data.data.items;carrierPagination.total=r.data.data.total;}}finally{carrierLoading.value=false;}}
+
+// GW Status
+const gwStatusData = ref<any>(null);
+async function loadGwStatusData(){try{const r=await getDrGwStatus();if(r.data?.code===0)gwStatusData.value=r.data.data;}catch{}}
 
 async function handleReload() { await reloadDrouting(); Message.success('重载成功'); }
 async function loadStats() { try { const r=await getDrStats(); if(r.data?.code===0) stats.value=r.data.data; } catch {} }

@@ -13,6 +13,8 @@ export const getDrGroups = (params: any) => request.get('/drouting/groups', { pa
 export const getDrCarriers = (params: any) => request.get('/drouting/carriers', { params });
 export const reloadDrouting = () => request.post('/drouting/reload');
 export const getDrStats = () => request.get('/drouting/stats');
+export const getDrGwStatus = () => request.get('/drouting/gw-status');
+export const getDrCarrierStatus = () => request.get('/drouting/carrier-status');
 
 // ===== LCR 路由 =====
 export const getLcrGateways = (params: any) => request.get('/lcr/gateways', { params });
@@ -38,15 +40,19 @@ export const updateDialplanRule = (id: number, data: any) => request.patch(`/dia
 export const deleteDialplanRule = (id: number) => request.delete(`/dialplan/${id}`);
 export const reloadDialplan = () => request.post('/dialplan/reload');
 export const translateDialplan = (dpid: number, input: string) => request.get('/dialplan/translate', { params: { dpid, input } });
+export const dumpDialplan = (dpid?: number) => request.get('/dialplan/dump', { params: dpid !== undefined ? { dpid } : {} });
 
 // ===== Mtree =====
 export const getMtreeRecords = (params: any) => request.get('/mtree', { params });
 export const createMtreeRecord = (data: any) => request.post('/mtree', data);
 export const deleteMtreeRecord = (id: number) => request.delete(`/mtree/${id}`);
 export const reloadMtree = (tname: string) => request.post('/mtree/reload', { tname });
+export const matchMtree = (tname: string, prefix: string) => request.get('/mtree/match', { params: { tname, prefix } });
+export const summaryMtree = (tname?: string) => request.get('/mtree/summary', { params: tname ? { tname } : {} });
 
 // ===== PDT =====
 export const getPdtRecords = (params: any) => request.get('/pdt', { params });
 export const createPdtRecord = (data: any) => request.post('/pdt', data);
 export const deletePdtRecord = (id: number) => request.delete(`/pdt/${id}`);
 export const reloadPdt = () => request.post('/pdt/reload');
+export const listPdt = () => request.get('/pdt/list');
