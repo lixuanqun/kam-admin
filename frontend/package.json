@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:antd": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix"
+    "lint": "eslint . --fix",
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.56.3",

@@ -1,225 +1,117 @@
 <template>
-  <a-layout class="layout" :style="{ height: '100vh' }">
+  <a-layout class="layout">
+    <!-- 侧边栏 -->
     <a-layout-sider
       collapsible
-      :collapsed="collapsed"
-      @collapse="onCollapse"
+      :collapsed="appStore.menuCollapsed"
+      @collapse="appStore.setCollapsed"
       :style="{ overflow: 'auto', height: '100vh' }"
       breakpoint="xl"
+      :width="appStore.menuWidth"
     >
       <div class="logo">
-        <h1 v-if="!collapsed">Kamailio</h1>
-        <h1 v-else>K</h1>
+        <h1 v-if="!appStore.menuCollapsed" class="logo-text">Kamailio</h1>
+        <h1 v-else class="logo-text">K</h1>
       </div>
-      <a-menu
-        :selected-keys="selectedKeys"
-        :open-keys="openKeys"
-        :style="{ width: '100%' }"
-        @menu-item-click="onMenuItemClick"
-        @sub-menu-click="onSubMenuClick"
-        auto-open-selected
-      >
-        <a-menu-item key="monitoring">
-          <template #icon><icon-dashboard /></template>
-          监控面板
-        </a-menu-item>
-
-        <a-sub-menu key="user-mgmt">
-          <template #icon><icon-user-group /></template>
-          <template #title>用户管理</template>
-          <a-menu-item key="subscribers">用户管理</a-menu-item>
-          <a-menu-item key="domains">域管理</a-menu-item>
-          <a-menu-item key="userdata">用户数据</a-menu-item>
-          <a-menu-item key="usrpreferences">用户偏好</a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="routing-mgmt">
-          <template #icon><icon-relation /></template>
-          <template #title>路由管理</template>
-          <a-menu-item key="dispatchers">调度器</a-menu-item>
-          <a-menu-item key="drouting">动态路由</a-menu-item>
-          <a-menu-item key="lcr">LCR 路由</a-menu-item>
-          <a-menu-item key="carrierroute">运营商路由</a-menu-item>
-          <a-menu-item key="dialplan">拨号计划</a-menu-item>
-          <a-menu-item key="mtree">内存树</a-menu-item>
-          <a-menu-item key="pdt">前缀域转换</a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="monitor-mgmt">
-          <template #icon><icon-eye /></template>
-          <template #title>实时监控</template>
-          <a-menu-item key="locations">注册监控</a-menu-item>
-          <a-menu-item key="dialogs">对话管理</a-menu-item>
-          <a-menu-item key="siptrace">SIP 跟踪</a-menu-item>
-          <a-menu-item key="topos">拓扑隐藏</a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="security-mgmt">
-          <template #icon><icon-safe /></template>
-          <template #title>安全管理</template>
-          <a-menu-item key="permissions">权限管理</a-menu-item>
-          <a-menu-item key="secfilter">安全过滤</a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="billing-mgmt">
-          <template #icon><icon-file /></template>
-          <template #title>计费跟踪</template>
-          <a-menu-item key="cdr">CDR 记录</a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="advanced-mgmt">
-          <template #icon><icon-apps /></template>
-          <template #title>高级功能</template>
-          <a-menu-item key="uac">UAC 注册</a-menu-item>
-          <a-menu-item key="htable">哈希表</a-menu-item>
-          <a-menu-item key="presence">存在服务</a-menu-item>
-          <a-menu-item key="msilo">离线消息</a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="system-mgmt">
-          <template #icon><icon-settings /></template>
-          <template #title>系统管理</template>
-          <a-menu-item key="system">系统管理</a-menu-item>
-          <a-menu-item key="rtpengine">RTPEngine</a-menu-item>
-          <a-menu-item key="version">数据库版本</a-menu-item>
-        </a-sub-menu>
-      </a-menu>
+      <AppMenu />
     </a-layout-sider>
+
+    <!-- 右侧主区域 -->
     <a-layout>
-      <a-layout-header :style="{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', background: 'var(--color-bg-2)', borderBottom: '1px solid var(--color-border)' }">
-        <div :style="{ fontSize: '16px', fontWeight: 'bold' }">
-          Kamailio Dashboard
-        </div>
-        <a-space>
-          <a-tooltip content="系统设置">
-            <a-button type="text" shape="circle">
-              <template #icon><icon-settings /></template>
-            </a-button>
-          </a-tooltip>
-          <a-dropdown trigger="click">
-            <a-avatar :size="32" :style="{ cursor: 'pointer', backgroundColor: '#165DFF' }">
-              <icon-user />
-            </a-avatar>
-            <template #content>
-              <a-doption @click="handleLogout">
-                <template #icon><icon-export /></template>
-                退出登录
-              </a-doption>
+      <!-- 顶部导航栏 -->
+      <a-layout-header class="layout-header">
+        <div class="header-left">
+          <a-button type="text" class="collapse-btn" @click="appStore.toggleCollapsed">
+            <template #icon>
+              <icon-menu-unfold v-if="appStore.menuCollapsed" />
+              <icon-menu-fold v-else />
             </template>
-          </a-dropdown>
-        </a-space>
+          </a-button>
+          <Breadcrumb />
+        </div>
+        <div class="header-right">
+          <a-space :size="16">
+            <!-- 暗黑模式切换 -->
+            <a-tooltip :content="appStore.theme === 'light' ? '切换暗黑模式' : '切换亮色模式'">
+              <a-button type="text" shape="circle" @click="appStore.toggleTheme">
+                <template #icon>
+                  <icon-moon-fill v-if="appStore.theme === 'light'" />
+                  <icon-sun-fill v-else />
+                </template>
+              </a-button>
+            </a-tooltip>
+            <!-- 全屏 -->
+            <a-tooltip content="全屏">
+              <a-button type="text" shape="circle" @click="toggleFullscreen">
+                <template #icon><icon-fullscreen /></template>
+              </a-button>
+            </a-tooltip>
+            <!-- 用户信息 -->
+            <a-dropdown trigger="click">
+              <a-space class="user-area" :size="8">
+                <a-avatar :size="28" :style="{ backgroundColor: '#165DFF' }">
+                  <icon-user />
+                </a-avatar>
+                <span class="user-name">{{ userStore.userInfo.name }}</span>
+              </a-space>
+              <template #content>
+                <a-doption @click="handleLogout">
+                  <template #icon><icon-export /></template>
+                  退出登录
+                </a-doption>
+              </template>
+            </a-dropdown>
+          </a-space>
+        </div>
       </a-layout-header>
-      <a-layout-content :style="{ overflow: 'auto', padding: '0', background: 'var(--color-fill-2)' }">
-        <router-view />
+
+      <!-- 页面标题栏 -->
+      <div class="page-header" v-if="currentTitle">
+        <h3 class="page-title">{{ currentTitle }}</h3>
+      </div>
+
+      <!-- 内容区域 -->
+      <a-layout-content class="layout-content">
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useUserStore } from '@/store';
+import { useUserStore, useAppStore } from '@/store';
+import { Breadcrumb } from '@/components';
+import AppMenu from '@/components/menu/index.vue';
 
 const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
+const appStore = useAppStore();
 
-const collapsed = ref(false);
-const openKeys = ref<string[]>(['user-mgmt']);
+// 初始化主题
+appStore.initTheme();
 
-const selectedKeys = computed(() => {
-  const name = route.name as string;
-  if (name?.startsWith('Kamailio')) {
-    return [name.replace('Kamailio', '').charAt(0).toLowerCase() + name.replace('Kamailio', '').slice(1)];
-  }
-  return [name || 'monitoring'];
+/** 当前页面标题 */
+const currentTitle = computed(() => {
+  return (route.meta?.title as string) || '';
 });
 
-watch(route, () => {
-  const name = route.name as string;
-  if (!name) return;
-  const key = name.startsWith('Kamailio')
-    ? name.replace('Kamailio', '').charAt(0).toLowerCase() + name.replace('Kamailio', '').slice(1)
-    : name;
-
-  // Auto open parent submenu
-  const menuMap: Record<string, string> = {
-    subscribers: 'user-mgmt',
-    domains: 'user-mgmt',
-    userdata: 'user-mgmt',
-    usrpreferences: 'user-mgmt',
-    dispatchers: 'routing-mgmt',
-    drouting: 'routing-mgmt',
-    lcr: 'routing-mgmt',
-    carrierroute: 'routing-mgmt',
-    dialplan: 'routing-mgmt',
-    mtree: 'routing-mgmt',
-    pdt: 'routing-mgmt',
-    locations: 'monitor-mgmt',
-    dialogs: 'monitor-mgmt',
-    siptrace: 'monitor-mgmt',
-    topos: 'monitor-mgmt',
-    permissions: 'security-mgmt',
-    secfilter: 'security-mgmt',
-    cdr: 'billing-mgmt',
-    uac: 'advanced-mgmt',
-    htable: 'advanced-mgmt',
-    presence: 'advanced-mgmt',
-    msilo: 'advanced-mgmt',
-    system: 'system-mgmt',
-    rtpengine: 'system-mgmt',
-    version: 'system-mgmt',
-  };
-  const parent = menuMap[key];
-  if (parent && !openKeys.value.includes(parent)) {
-    openKeys.value.push(parent);
-  }
-}, { immediate: true });
-
-function onCollapse(val: boolean) {
-  collapsed.value = val;
-}
-
-function onMenuItemClick(key: string) {
-  const routeMap: Record<string, string> = {
-    monitoring: 'KamailioMonitoring',
-    subscribers: 'KamailioSubscribers',
-    domains: 'KamailioDomains',
-    userdata: 'KamailioUserdata',
-    usrpreferences: 'KamailioUsrpreferences',
-    dispatchers: 'KamailioDispatchers',
-    drouting: 'KamailioDrouting',
-    lcr: 'KamailioLcr',
-    carrierroute: 'KamailioCarrierroute',
-    dialplan: 'KamailioDialplan',
-    mtree: 'KamailioMtree',
-    pdt: 'KamailioPdt',
-    locations: 'KamailioLocations',
-    dialogs: 'KamailioDialogs',
-    siptrace: 'KamailioSiptrace',
-    topos: 'KamailioTopos',
-    permissions: 'KamailioPermissions',
-    secfilter: 'KamailioSecfilter',
-    cdr: 'KamailioCdr',
-    uac: 'KamailioUac',
-    htable: 'KamailioHtable',
-    presence: 'KamailioPresence',
-    msilo: 'KamailioMsilo',
-    rtpengine: 'KamailioRtpengine',
-    system: 'KamailioSystem',
-    version: 'KamailioVersion',
-  };
-  const routeName = routeMap[key];
-  if (routeName) {
-    router.push({ name: routeName });
+/** 全屏切换 */
+function toggleFullscreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    document.documentElement.requestFullscreen();
   }
 }
 
-function onSubMenuClick(key: string, openKeysArr: string[]) {
-  openKeys.value = openKeysArr;
-}
-
+/** 退出登录 */
 function handleLogout() {
   userStore.logout();
   router.push({ name: 'login' });
@@ -229,7 +121,7 @@ function handleLogout() {
 <style scoped lang="less">
 .layout {
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 .logo {
@@ -239,11 +131,73 @@ function handleLogout() {
   height: 54px;
   color: var(--color-white);
 
-  h1 {
+  &-text {
     margin: 0;
     font-size: 18px;
     font-weight: bold;
     white-space: nowrap;
   }
+}
+
+.layout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 16px;
+  background: var(--color-bg-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.collapse-btn {
+  font-size: 18px;
+  color: var(--color-text-2);
+}
+
+.user-area {
+  cursor: pointer;
+}
+
+.user-name {
+  font-size: 14px;
+  color: var(--color-text-1);
+}
+
+.page-header {
+  padding: 12px 20px 0;
+  background: var(--color-fill-2);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+
+.layout-content {
+  overflow: auto;
+  padding: 0;
+  background: var(--color-fill-2);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
