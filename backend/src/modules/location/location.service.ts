@@ -77,6 +77,13 @@ export class LocationService {
   }
 
   /**
+   * 将 usrloc 内存缓存刷入数据库 (RPC ul.flush)
+   */
+  async flushUsrloc(): Promise<void> {
+    await this.kamailioRpcService.flushUsrloc();
+  }
+
+  /**
    * 根据用户名查询注册
    */
   async findByUsername(username: string): Promise<Location[]> {

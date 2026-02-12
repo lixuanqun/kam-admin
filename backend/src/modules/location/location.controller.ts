@@ -1,9 +1,11 @@
 import {
   Controller,
   Get,
+  Post,
   Delete,
   Query,
   Param,
+  Body,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LocationService } from './location.service';
@@ -82,5 +84,13 @@ export class LocationController {
   ): Promise<ApiResponseDto> {
     await this.locationService.deleteContact(body.table || 'location', body.aor, body.contact);
     return ApiResponseDto.success(null, '删除成功');
+  }
+
+  @Post('flush')
+  @ApiOperation({ summary: '将 usrloc 内存缓存刷入数据库 (RPC ul.flush)' })
+  @ApiResponse({ status: 200, description: '刷新成功' })
+  async flushUsrloc(): Promise<ApiResponseDto> {
+    await this.locationService.flushUsrloc();
+    return ApiResponseDto.success(null, '刷新成功');
   }
 }

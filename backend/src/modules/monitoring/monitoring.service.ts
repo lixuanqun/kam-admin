@@ -107,6 +107,57 @@ export class MonitoringService {
   }
 
   /**
+   * 检查 Kamailio 关键模块是否可用
+   */
+  async checkModules(): Promise<{
+    connected: boolean;
+    version?: string;
+    modules: { name: string; available: boolean; error?: string }[];
+  }> {
+    const modules: { name: string; rpc: string; params?: any[] }[] = [
+      { name: 'core', rpc: 'core.version' },
+      { name: 'usrloc', rpc: 'ul.dump', params: [] },
+      { name: 'dispatcher', rpc: 'dispatcher.list' },
+      { name: 'drouting', rpc: 'drouting.gw_status' },
+      { name: 'domain', rpc: 'domain.dump' },
+      { name: 'permissions', rpc: 'permissions.addressDump' },
+      { name: 'dialog', rpc: 'dlg.stats_active' },
+      { name: 'cfg_rpc', rpc: 'cfg.list' },
+      { name: 'statistics', rpc: 'stats.get_statistics', params: ['all'] },
+      { name: 'tls', rpc: 'tls.list' },
+      { name: 'pike', rpc: 'pike.list' },
+    ];
+
+    const settled = await Promise.allSettled(
+      modules.map((mod) =>
+        this.kamailioRpcService.call(mod.rpc, mod.params || []),
+      ),
+    );
+
+    const results = modules.map((mod, i) => {
+      const s = settled[i];
+      if (s.status === 'fulfilled') {
+        return { name: mod.name, available: true };
+      }
+      return {
+        name: mod.name,
+        available: false,
+        error: s.reason instanceof Error ? s.reason.message : 'Unknown error',
+      };
+    });
+
+    const coreIdx = modules.findIndex((m) => m.name === 'core');
+    const connected = coreIdx >= 0 && settled[coreIdx].status === 'fulfilled';
+    let version: string | undefined;
+    if (coreIdx >= 0 && settled[coreIdx].status === 'fulfilled') {
+      const v = (settled[coreIdx] as PromiseFulfilledResult<unknown>).value;
+      version = typeof v === 'string' ? v : undefined;
+    }
+
+    return { connected, version, modules: results };
+  }
+
+  /**
    * 获取系统概览
    */
   async getSystemOverview(): Promise<{

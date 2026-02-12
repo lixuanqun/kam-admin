@@ -16,6 +16,14 @@ export class MonitoringController {
     return ApiResponseDto.success(health);
   }
 
+  @Get('check-modules')
+  @ApiOperation({ summary: '检查 Kamailio 关键模块是否可用' })
+  @ApiResponse({ status: 200, description: '获取成功' })
+  async checkModules(): Promise<ApiResponseDto> {
+    const result = await this.monitoringService.checkModules();
+    return ApiResponseDto.success(result);
+  }
+
   @Get('dashboard')
   @ApiOperation({ summary: '获取仪表盘数据' })
   @ApiResponse({ status: 200, description: '获取成功' })

@@ -1,0 +1,24 @@
+---
+description: Arco Design Vue 组件库开发规范与技能，基于 https://arco.design/vue/docs/start
+globs: frontend/**/*.{vue,ts,tsx}
+---
+
+# Arco Design Vue 开发规则
+
+编写前端 Vue 代码时遵循以下 Arco Design Vue 约定：
+
+## 引入
+- 全局使用 `app.use(ArcoVue)` 和 `app.use(ArcoVueIcon)`，图标需单独引入
+- 消息提示使用 `import { Message } from '@arco-design/web-vue'`
+
+## 组件用法
+- 布局：`a-layout` + `a-layout-sider` + `a-layout-header` + `a-layout-content`
+- 表格：`a-table` 使用 `#action` 等插槽定制操作列，必须设置 `row-key`
+- 表单：`a-form` 的 `field` 需与 `formState` 字段一致，`a-modal` 用 `v-model:visible`
+- 确认：`a-popconfirm` 的 `@ok` 处理删除等操作
+- 图标：`<icon-search />`、`<icon-plus />`、`<icon-edit />`、`<icon-delete />`、`<icon-refresh />`
+
+## 主题
+- 在 `vite.config.ts` 的 `css.preprocessorOptions.less.modifyVars` 中定制主色
+
+完整技能文档见：`docs/arco-design-vue-skill.md`

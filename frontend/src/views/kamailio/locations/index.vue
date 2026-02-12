@@ -9,6 +9,9 @@
         <a-input v-model="searchKeyword" placeholder="搜索用户名" :style="{width:'200px'}" @press-enter="handleSearch"><template #prefix><icon-search /></template></a-input>
         <a-button type="primary" @click="handleSearch"><template #icon><icon-search /></template>搜索</a-button>
         <a-button @click="()=>{loadData();loadStats()}"><template #icon><icon-refresh /></template>刷新</a-button>
+        <a-popconfirm content="将内存中的注册信息刷入数据库，确定执行？" @ok="handleFlush">
+          <a-button><template #icon><icon-sync /></template>刷新到数据库</a-button>
+        </a-popconfirm>
       </a-space>
     </a-card>
     <a-card class="general-card">
@@ -27,7 +30,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import { Message } from '@arco-design/web-vue';
-import { getLocations, getLocationStats, getOnlineCount, deleteUserLocation, type Location } from '@/api/kamailio';
+import { getLocations, getLocationStats, getOnlineCount, deleteUserLocation, flushUsrloc, type Location } from '@/api/kamailio';
 
 const loading = ref(false);
 const data = ref<Location[]>([]);
@@ -50,5 +53,6 @@ async function loadData() { loading.value = true; try { const res = await getLoc
 async function loadStats() { try { const [c, s] = await Promise.all([getOnlineCount(), getLocationStats()]); if (c.data?.code === 0) onlineCount.value = c.data.data; if (s.data?.code === 0) stats.value = s.data.data; } catch {} }
 function handleSearch() { pagination.current = 1; loadData(); }
 async function handleDelete(record: Location) { try { const res = await deleteUserLocation(record.username, record.domain); if (res.data?.code === 0) { Message.success('已强制下线'); loadData(); loadStats(); } } catch { Message.error('操作失败'); } }
+async function handleFlush() { try { const res = await flushUsrloc(); if (res.data?.code === 0) { Message.success('已刷新到数据库'); loadData(); loadStats(); } } catch { Message.error('操作失败'); } }
 onMounted(() => { loadData(); loadStats(); });
 </script>

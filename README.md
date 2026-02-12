@@ -19,6 +19,7 @@
   <img src="https://img.shields.io/badge/NestJS-10.x-red?style=flat-square&logo=nestjs" alt="NestJS">
   <img src="https://img.shields.io/badge/Vue-3.x-green?style=flat-square&logo=vue.js" alt="Vue">
   <img src="https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Kamailio-5.x%20%7C%206.x-orange?style=flat-square" alt="Kamailio">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License">
 </p>
 
@@ -40,7 +41,9 @@
 - Node.js >= 18.0.0
 - npm >= 8.0.0
 - MySQL 5.7+ / MariaDB 10.x
-- Kamailio 5.x (with JSONRPC enabled)
+- Kamailio 5.x / 6.0.x（需启用 JSONRPC，加载 jsonrpcs、xhttp 等模块）
+
+> 详细 Kamailio 配置见 [部署指南](./docs/deployment-guide.md#45-dashboard-所需-kamailio-模块清单)
 
 ### Backend Setup
 

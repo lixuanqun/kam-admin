@@ -142,7 +142,12 @@ npm run dev
 
 ## 功能模块
 
-详细操作手册请参阅：
+### 开发技能
+
+- [Arco Design Vue 开发技能](./arco-design-vue-skill.md) - 基于官方文档的前端组件库使用总结
+- [Kamailio 配置与知识 SKILL](./kamailio-skill.md) - 基于官方文档的 Kamailio SIP 服务器配置总结
+
+### 详细操作手册
 
 - [用户管理操作手册](./user-guide.md)
 - [路由管理操作手册](./routing-guide.md)

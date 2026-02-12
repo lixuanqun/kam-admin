@@ -71,6 +71,25 @@
         </a-col>
       </a-row>
 
+      <!-- 模块检查 -->
+      <a-card title="模块检查" class="general-card">
+        <a-space style="margin-bottom: 12px">
+          <a-button size="small" @click="loadModuleCheck">
+            <template #icon><icon-refresh /></template>检查模块
+          </a-button>
+          <span v-if="moduleCheck.connected" style="color: var(--color-success-6)">已连接 · {{ moduleCheck.version || '-' }}</span>
+          <span v-else style="color: var(--color-danger-6)">未连接</span>
+        </a-space>
+        <a-table :columns="moduleColumns" :data="moduleCheck.modules" :pagination="false" size="small">
+          <template #available="{ record }">
+            <a-tag :color="record.available ? 'green' : 'red'">{{ record.available ? '可用' : '不可用' }}</a-tag>
+          </template>
+          <template #error="{ record }">
+            <span v-if="record.error" style="color: var(--color-danger-6); font-size: 12px">{{ record.error }}</span>
+          </template>
+        </a-table>
+      </a-card>
+
       <!-- 核心信息 -->
       <a-card title="Kamailio 信息" class="general-card" v-if="coreInfo">
         <a-descriptions :column="2" bordered size="small">
@@ -92,9 +111,15 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Message } from '@arco-design/web-vue';
-import { checkHealth, getDashboardData, getStatistics, getCoreInfo, getActiveDialogs } from '@/api/kamailio';
+import { checkHealth, checkModules, getDashboardData, getStatistics, getCoreInfo, getActiveDialogs } from '@/api/kamailio';
 
 const loading = ref(false);
+const moduleCheck = ref({ connected: false, version: '' as string | undefined, modules: [] as { name: string; available: boolean; error?: string }[] });
+const moduleColumns = [
+  { title: '模块', dataIndex: 'name', width: 120 },
+  { title: '状态', slotName: 'available', width: 90 },
+  { title: '错误', slotName: 'error' },
+];
 const health = ref({ status: 'offline' as 'online' | 'offline', uptime: null as any, version: '' });
 const dashboard = ref({ subscriberCount: 0, onlineCount: 0, todayCalls: 0, todayMissedCalls: 0, successRate: 0, kamailioStatus: 'offline' });
 const coreInfo = ref<any>(null);
@@ -102,9 +127,19 @@ const dialogs = ref({ count: 0, dialogs: [] as any[] });
 const statistics = ref<any>(null);
 let refreshTimer: any = null;
 
+async function loadModuleCheck() {
+  try {
+    const res = await checkModules();
+    if (res.data?.code === 0) moduleCheck.value = res.data.data;
+  } catch {
+    moduleCheck.value = { connected: false, version: '', modules: [] };
+  }
+}
+
 async function loadAllData() {
   loading.value = true;
   try {
+    loadModuleCheck();
     await Promise.all([
       checkHealth().then(res => { if (res.data?.code === 0) health.value = res.data.data; }).catch(() => { health.value.status = 'offline'; }),
       getDashboardData().then(res => { if (res.data?.code === 0) dashboard.value = res.data.data; }).catch(() => {}),

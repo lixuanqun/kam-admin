@@ -266,6 +266,48 @@ curl -X POST http://localhost:5060/RPC \
   -d '{"jsonrpc":"2.0","method":"core.version","id":1}'
 ```
 
+### 4.5 Dashboard 所需 Kamailio 模块清单
+
+Dashboard 正常运行需要 Kamailio 加载以下模块，请确保 `kamailio.cfg` 中已正确配置：
+
+| 模块 | 用途 | 必需性 |
+|------|------|--------|
+| **jsonrpcs** | JSONRPC 服务，Dashboard 通信必需 | 必需 |
+| **xhttp** | HTTP 请求处理，jsonrpcs 依赖 | 必需 |
+| **usrloc** | 用户位置/注册，监控与位置管理 | 必需 |
+| **dispatcher** | 调度器，负载均衡配置 | 必需 |
+| **drouting** | 动态路由，网关与规则管理 | 必需 |
+| **domain** | 域管理 | 必需 |
+| **permissions** | 权限/IP 白名单 | 必需 |
+| **dialog** | 对话管理 | 必需 |
+| **htable** | 哈希表 | 可选 |
+| **cfg_rpc** | 运行时配置，系统管理页 | 推荐 |
+| **statistics** | 统计信息，监控与系统页 | 推荐 |
+| **tls** | TLS 配置，系统管理页 | 可选 |
+| **pike** | Pike 防护，系统管理页 | 可选 |
+| **pdt** | 前缀域转换 | 可选 |
+| **mtree** | 内存树 | 可选 |
+| **secfilter** | 安全过滤 | 可选 |
+| **presence** | 存在服务 | 可选 |
+| **msilo** | 离线消息 | 可选 |
+| **uac** | UAC 注册 | 可选 |
+| **rtpengine** | RTPEngine | 可选 |
+| **carrierroute** | 运营商路由 | 可选 |
+| **dialplan** | 拨号计划 | 可选 |
+| **lcr** | LCR 路由 | 可选 |
+
+**最小配置示例**（仅保证 Dashboard 可连接与基本监控）：
+
+```
+loadmodule "xhttp.so"
+loadmodule "jsonrpcs.so"
+loadmodule "usrloc.so"
+loadmodule "sl.so"
+# ... 其他业务所需模块
+```
+
+**系统管理页完整功能** 需额外加载：`cfg_rpc`、`statistics`、`tls`、`pike`。
+
 ---
 
 ## 5. 数据库配置

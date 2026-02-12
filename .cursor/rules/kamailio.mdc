@@ -1,0 +1,25 @@
+---
+description: Kamailio SIP 服务器配置与 RPC 知识，基于 https://www.kamailio.org/w/documentation/
+globs: backend/**/*.ts, docs/**/*.md
+---
+
+# Kamailio 开发规则
+
+编写 Kamailio 相关后端代码或配置时参考以下约定：
+
+## 文档
+- 官方文档: https://www.kamailio.org/w/documentation/
+- 模块文档: https://kamailio.org/docs/modules/6.0.x/
+- 完整技能: docs/kamailio-skill.md
+
+## RPC 调用
+- 使用 JSONRPC 2.0，HTTP POST 到 /RPC
+- 格式: `{"jsonrpc":"2.0","method":"module.method","params":[...],"id":1}`
+- 常用: core.version, ul.dump, dispatcher.reload, drouting.reload, domain.reload, dlg.list, permissions.addressReload
+
+## kamailio.cfg
+- 需加载 jsonrpcs + xhttp 才能通过 HTTP 调用 RPC
+- event_route[xhttp:request] 中 if ($hu =~ "^/RPC") jsonrpc_dispatch()
+
+## 配置
+- KAMAILIO_RPC_HOST, KAMAILIO_RPC_PORT (默认 5060), KAMAILIO_RPC_PATH (/RPC)

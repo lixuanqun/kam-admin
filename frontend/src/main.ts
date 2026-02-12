@@ -7,6 +7,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+import '@/api/interceptor';
+
 import './assets/style/global.less';
 
 const app = createApp(App);

@@ -109,6 +109,13 @@ export class KamailioRpcService {
   }
 
   /**
+   * 将 usrloc 内存缓存刷入数据库
+   */
+  async flushUsrloc(): Promise<any> {
+    return this.call('ul.flush');
+  }
+
+  /**
    * 重载权限地址表
    */
   async reloadPermissions(): Promise<any> {
