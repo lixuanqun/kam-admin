@@ -18,98 +18,88 @@
 
 ### 1.2 软件要求
 
-| 软件 | 版本 |
-|------|------|
-| Node.js | >= 18.0.0 |
-| npm | >= 8.0.0 |
-| MySQL/MariaDB | 5.7+ / 10.x |
-| Kamailio | 5.x |
-| Nginx | 1.18+ (可选) |
+| 软件 | 版本 | 说明 |
+|------|------|------|
+| JDK | 21 | 后端 kam-admin-server |
+| Maven | 3.8+ | 构建后端 |
+| Node.js | >= 18.0.0 | 前端 kam-admin-console |
+| pnpm | 9.x | 前端依赖管理 |
+| MySQL/MariaDB/PostgreSQL | 5.7+ / 10.x / 12+ | 业务数据库 |
+| Kamailio | 5.x / 6.x | 需启用 JSONRPC |
+| Nginx | 1.18+ | 可选，反向代理与静态资源 |
 
 ---
 
-## 2. 后端部署
+## 2. 后端部署（kam-admin-server）
 
-### 2.1 下载代码
+### 2.1 下载代码与构建
 
 ```bash
 git clone https://github.com/lixuanqun/kam-admin.git
-cd kam-admin/backend
+cd kam-admin
+
+# 构建（需 JDK 21）
+mvn clean package -pl kam-admin-server -am
 ```
 
-### 2.2 安装依赖
+可运行 JAR 位于：`kam-admin-server/target/kam-admin-server-0.0.1.jar`。
 
-```bash
-npm install --production
-```
+### 2.2 配置
 
-### 2.3 配置环境变量
-
-创建 `.env` 文件：
+通过环境变量或 `application.yml` / Nacos 配置，例如：
 
 ```env
-# 服务配置
-NODE_ENV=production
+# 服务端口
 PORT=3000
 
-# 数据库配置
-DB_HOST=localhost
-DB_PORT=3306
-DB_USERNAME=kamailio
-DB_PASSWORD=your_secure_password
-DB_DATABASE=kamailio
-DB_LOGGING=false
+# 数据库（示例 MySQL）
+SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/kamailio
+SPRING_DATASOURCE_USERNAME=kamailio
+SPRING_DATASOURCE_PASSWORD=your_secure_password
 
-# Kamailio RPC 配置
+# Kamailio RPC
 KAMAILIO_RPC_HOST=localhost
 KAMAILIO_RPC_PORT=5060
 KAMAILIO_RPC_PATH=/RPC
+
+# Redis（可选，集群/缓存/限流）
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Nacos（可选，配置中心/服务发现）
+NACOS_SERVER_ADDR=127.0.0.1:8848
 ```
 
-### 2.4 构建项目
+### 2.3 启动服务
+
+**直接运行 JAR：**
 
 ```bash
-npm run build
+java -jar kam-admin-server/target/kam-admin-server-0.0.1.jar
 ```
 
-### 2.5 启动服务
-
-**使用 PM2 管理（推荐）：**
-
-```bash
-# 安装 PM2
-npm install -g pm2
-
-# 启动服务
-pm2 start dist/main.js --name kam-dashboard-api
-
-# 设置开机自启
-pm2 startup
-pm2 save
-```
-
-**使用 systemd：**
+**使用 systemd（推荐生产）：**
 
 创建 `/etc/systemd/system/kam-dashboard-api.service`：
 
 ```ini
 [Unit]
-Description=Kamailio Dashboard API
+Description=Kamailio Dashboard API (Spring Boot)
 After=network.target
 
 [Service]
 Type=simple
 User=www-data
-WorkingDirectory=/opt/kam-admin/backend
-ExecStart=/usr/bin/node dist/main.js
+WorkingDirectory=/opt/kam-admin
+ExecStart=/usr/bin/java -jar /opt/kam-admin/kam-admin-server/target/kam-admin-server-0.0.1.jar
 Restart=on-failure
-Environment=NODE_ENV=production
+Environment=PORT=3000
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-启动服务：
+启动：
 
 ```bash
 systemctl daemon-reload
@@ -119,37 +109,32 @@ systemctl start kam-dashboard-api
 
 ---
 
-## 3. 前端部署
+## 3. 前端部署（kam-admin-console）
 
-### 3.1 安装依赖
+### 3.1 安装依赖与构建
 
 ```bash
-cd kam-admin/frontend
-npm install
+cd kam-admin-console
+pnpm install
+pnpm run build
 ```
+
+构建产物位于 `kam-admin-console/dist` 目录。
 
 ### 3.2 配置环境
 
-编辑 `.env.production`：
+编辑 `kam-admin-console/.env.production`（如需要）：
 
 ```env
 VITE_API_BASE_URL=/api
 ```
-
-### 3.3 构建项目
-
-```bash
-npm run build
-```
-
-构建产物位于 `dist` 目录。
 
 ### 3.4 部署到 Nginx
 
 **复制文件：**
 
 ```bash
-cp -r dist/* /var/www/kam-dashboard/
+cp -r kam-admin-console/dist/* /var/www/kam-dashboard/
 ```
 
 **Nginx 配置：**
@@ -374,24 +359,24 @@ certbot renew --dry-run
 
 ## 7. 监控和日志
 
-### 7.1 PM2 监控
+### 7.1 后端服务监控（systemd）
 
 ```bash
 # 查看状态
-pm2 status
+systemctl status kam-dashboard-api
 
 # 查看日志
-pm2 logs kam-dashboard-api
+journalctl -u kam-dashboard-api -f -n 100
 
-# 监控面板
-pm2 monit
+# 资源占用
+systemctl status kam-dashboard-api  # 或结合 top/htop 按 PID 查看
 ```
 
 ### 7.2 日志配置
 
 **后端日志：**
 
-使用 Winston 或 Pino 配置日志输出到文件。
+Spring Boot 默认输出到 stdout，由 systemd 的 journald 接管；也可在 `application.yml` 中配置 `logging.file.name` 输出到文件。
 
 **Nginx 日志：**
 
@@ -413,10 +398,6 @@ error_log /var/log/nginx/kam-dashboard.error.log;
     delaycompress
     notifempty
     create 0640 www-data www-data
-    sharedscripts
-    postrotate
-        pm2 reloadLogs
-    endscript
 }
 ```
 
@@ -457,7 +438,7 @@ BACKUP_DIR=/backup/config
 mkdir -p $BACKUP_DIR
 
 tar -czf $BACKUP_DIR/kam-admin-config_$DATE.tar.gz \
-    /opt/kam-admin/backend/.env \
+    /opt/kam-admin/kam-admin-server/src/main/resources/application*.yml \
     /etc/kamailio/kamailio.cfg \
     /etc/nginx/sites-available/kam-dashboard
 
@@ -471,8 +452,9 @@ find $BACKUP_DIR -name "*.tar.gz" -mtime +30 -delete
 ### 9.1 后端无法启动
 
 ```bash
-# 检查日志
-pm2 logs kam-dashboard-api --lines 100
+# 检查服务状态与日志（systemd）
+systemctl status kam-dashboard-api
+journalctl -u kam-dashboard-api -n 100 --no-pager
 
 # 检查端口占用
 lsof -i :3000
@@ -511,19 +493,22 @@ kamctl ps
 
 ## 10. 性能优化
 
-### 10.1 Node.js 优化
+### 10.1 JVM 优化
 
 ```bash
-# 设置 Node.js 内存限制
-NODE_OPTIONS="--max-old-space-size=4096" pm2 start dist/main.js
+# 启动时设置堆内存等（示例）
+java -Xms512m -Xmx1024m -jar kam-admin-server/target/kam-admin-server-0.0.1.jar
 ```
+
+systemd 的 `ExecStart` 中可写为：
+`ExecStart=/usr/bin/java -Xms512m -Xmx1024m -jar /opt/kam-admin/kam-admin-server/target/kam-admin-server-0.0.1.jar`
 
 ### 10.2 数据库连接池
 
-在 `.env` 中配置：
+在 `application.yml` 或环境变量中配置（示例）：
 
-```env
-DB_POOL_SIZE=10
+```yaml
+spring.datasource.hikari.maximum-pool-size: 10
 ```
 
 ### 10.3 Nginx 优化
@@ -544,50 +529,42 @@ proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=api_cache:10m;
 ### 11.1 后端升级
 
 ```bash
-cd /opt/kam-admin/backend
+cd /opt/kam-admin
 
-# 备份当前版本
-cp -r dist dist.bak
+# 备份当前 JAR
+cp kam-admin-server/target/kam-admin-server-0.0.1.jar kam-admin-server/target/kam-admin-server-0.0.1.jar.bak
 
 # 拉取新代码
 git pull origin main
 
-# 安装依赖
-npm install
-
-# 构建
-npm run build
+# 构建（需 JDK 21）
+mvn clean package -pl kam-admin-server -am
 
 # 重启服务
-pm2 restart kam-dashboard-api
+systemctl restart kam-dashboard-api
 ```
 
 ### 11.2 前端升级
 
 ```bash
-cd /opt/kam-admin/frontend
+cd /opt/kam-admin
 
 # 拉取新代码
 git pull origin main
 
-# 安装依赖
-npm install
-
-# 构建
-npm run build
+# 前端构建（仅前端子工程使用 pnpm）
+cd kam-admin-console && pnpm install && pnpm run build
 
 # 部署
-cp -r dist/* /var/www/kam-dashboard/
+cp -r kam-admin-console/dist/* /var/www/kam-dashboard/
 ```
 
 ### 11.3 回滚
 
 ```bash
 # 后端回滚
-cd /opt/kam-admin/backend
-rm -rf dist
-mv dist.bak dist
-pm2 restart kam-dashboard-api
+cp kam-admin-server/target/kam-admin-server-0.0.1.jar.bak kam-admin-server/target/kam-admin-server-0.0.1.jar
+systemctl restart kam-dashboard-api
 
 # 前端回滚
 cp -r /var/www/kam-dashboard.bak/* /var/www/kam-dashboard/

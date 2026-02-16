@@ -1,0 +1,16 @@
+# Nacos 配置拉取（优先于 application.yml 加载）
+# 集群模式下可将 DB、Redis、Kamailio 等配置放到 Nacos，实现配置外置与动态刷新
+spring:
+  application:
+    name: kam-admin-server
+  cloud:
+    nacos:
+      config:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:}
+        file-extension: yaml
+        # 共享配置 dataId，可选：如 kam-admin-server.yaml 或 kam-admin-server-${profile}.yaml
+        # shared-configs / extension-configs 可在 Nacos 控制台配置
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:}

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kam-admin-server-config
+  namespace: kam-admin
+  labels:
+    app: kam-admin-server
+data:
+  # 应用配置（敏感信息请用 Secret）
+  SPRING_PROFILES_ACTIVE: "mysql"
+  PORT: "3000"
+  # Kamailio RPC（示例，生产环境按需修改）
+  KAMAILIO_RPC_HOST: "kamailio.example.com"
+  KAMAILIO_RPC_PORT: "5060"
+  KAMAILIO_RPC_PATH: "/RPC"
+  # Redis（若集群内无 Redis，可指向外部）
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  # Nacos（可选）
+  # NACOS_SERVER_ADDR: "nacos:8848"

@@ -1,0 +1,28 @@
+# 需集群已安装 Ingress Controller（如 nginx-ingress、traefik）
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kam-admin
+  namespace: kam-admin
+  annotations:
+    # nginx-ingress 示例
+    # nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    # nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: kam-admin.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kam-admin-server
+                port:
+                  number: 3000
+  # 若需 HTTPS，取消注释并配置 tls
+  # tls:
+  #   - hosts:
+  #       - kam-admin.example.com
+  #     secretName: kam-admin-tls

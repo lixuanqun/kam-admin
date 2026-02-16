@@ -1,10 +1,12 @@
 # Dependencies
 node_modules/
 .pnpm-store/
+package-lock.json
 
 # Build outputs
 dist/
 build/
+target/
 .output/
 .nuxt/
 .next/
@@ -12,6 +14,12 @@ build/
 # IDE
 .vscode/
 .idea/
+.cursor/
+
+# Maven / JAR（若不想提交打包产物）
+*.jar
+!**/src/**/*.jar
+
 *.iws
 *.iml
 *.ipr

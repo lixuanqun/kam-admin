@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+.cursor
+
+# Build outputs
+**/target
+**/dist
+**/node_modules
+**/.pnpm-store
+
+# Docs & scripts (not needed for server build)
+docs
+scripts
+sql
+k8s
+
+# Frontend (not needed for server image)
+kam-admin-console
+
+# Misc
+*.md
+*.log
+.env*
+!.env.example

@@ -1,0 +1,112 @@
+# kam-admin 全栈开发/演示环境
+# 包含：Nginx（前端）、kam-admin-server、MySQL、Redis、Kamailio、RTPengine
+# 使用：docker compose up -d
+# 访问：http://localhost:80（前端+API 统一入口）
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: kam-admin-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: kamailio
+      MYSQL_USER: kamailio
+      MYSQL_PASSWORD: kamailiorw
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: kam-admin-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  rtpengine:
+    image: fonoster/rtpengine:latest
+    container_name: kam-admin-rtpengine
+    restart: unless-stopped
+    ports:
+      - "22222:22222/udp"  # NG 控制协议（Kamailio 连接）
+      - "10000-10100:10000-10100/udp"  # RTP 媒体端口
+    environment:
+      RTPENGINE_BIND_NG_PORT: "22222"
+      RTPENGINE_PORT_MIN: "10000"
+      RTPENGINE_PORT_MAX: "10100"
+      RTPENGINE_LOG_LEVEL: "6"
+
+  kamailio:
+    build:
+      context: ./docker/kamailio
+      dockerfile: Dockerfile
+    image: kam-admin-kamailio:local
+    container_name: kam-admin-kamailio
+    restart: unless-stopped
+    ports:
+      - "5060:5060/tcp"
+      - "5060:5060/udp"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rtpengine:
+        condition: service_started
+
+  kam-admin-server:
+    build:
+      context: .
+      dockerfile: kam-admin-server/Dockerfile
+    image: kam-admin-server:0.0.1
+    container_name: kam-admin-server
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      PORT: "3000"
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/kamailio?useUnicode=true&characterEncoding=utf8
+      SPRING_DATASOURCE_USERNAME: kamailio
+      SPRING_DATASOURCE_PASSWORD: kamailiorw
+      KAMAILIO_RPC_HOST: kamailio
+      KAMAILIO_RPC_PORT: "5060"
+      KAMAILIO_RPC_PATH: /RPC
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kamailio:
+        condition: service_started
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    image: kam-admin-nginx:local
+    container_name: kam-admin-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - kam-admin-server
+
+volumes:
+  mysql_data:
+  redis_data:

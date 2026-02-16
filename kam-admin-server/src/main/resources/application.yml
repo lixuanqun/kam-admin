@@ -1,0 +1,75 @@
+server:
+  port: ${PORT:3000}
+
+spring:
+  application:
+    name: kam-admin-server
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:default}
+  # Redis（集群下用于缓存、限流、会话、分布式锁；可由 Nacos 覆盖）
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: ${DB_LOGGING:false}
+    open-in-view: false
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+# 开放 API（对外接口：认证、限流见 docs/architecture-api-cluster-nacos-redis.md）
+open-api:
+  enabled: ${OPEN_API_ENABLED:true}
+  keys: ${OPEN_API_KEYS:}
+  rate-limit-per-minute: ${OPEN_API_RATE_LIMIT_PER_MINUTE:100}
+
+# 多租户（见 docs/architecture-multi-tenancy.md）
+multi-tenant:
+  enabled: ${MULTI_TENANT_ENABLED:true}
+  default-tenant-code: ${MULTI_TENANT_DEFAULT_CODE:default}
+  resolve-order: header,subdomain   # header 优先，再子域
+  subdomain-enabled: ${MULTI_TENANT_SUBDOMAIN_ENABLED:false}
+  subdomain-suffix: ${MULTI_TENANT_SUBDOMAIN_SUFFIX:}   # 如 .dashboard.example.com，用于从 Host 提取租户
+  init-default-tenant: ${MULTI_TENANT_INIT_DEFAULT:true} # 启动时若无租户则插入 default
+
+# 鉴权方式：按路径选择（见 docs/architecture-common-modules-auth.md）
+auth:
+  open-api:
+    method: ${AUTH_OPEN_API_METHOD:API_KEY}
+  console:
+    method: ${AUTH_CONSOLE_METHOD:SESSION}
+
+# Kamailio RPC
+kamailio:
+  rpc:
+    host: ${KAMAILIO_RPC_HOST:localhost}
+    port: ${KAMAILIO_RPC_PORT:5060}
+    path: ${KAMAILIO_RPC_PATH:/RPC}
+    timeout: 10000
+  kamctl-path: ${KAMAILIO_KAMCTL_PATH:/usr/sbin/kamctl}
+  default-domain: ${KAMAILIO_DEFAULT_DOMAIN:localhost}
+
+# Actuator：K8S 健康检查 /actuator/health、/actuator/health/liveness、/actuator/health/readiness
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+# Swagger/OpenAPI：JSON 规范 /v3/api-docs，UI 页面 /api/docs（导出文档见 docs/export-openapi.md）
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /api/docs
+    enabled: true
+    tags-sorter: alpha

@@ -2,10 +2,10 @@
 
 ## 概述
 
-本文档提供 Kamailio Dashboard 后端 API 的完整参考。
+本文档提供 Kamailio Dashboard 后端 API 的完整参考。后端为 **kam-admin-server**（Spring Boot 3），对内管理 API 前缀为 `/api`，对外开放 API 前缀为 `/open/v1`（需 API Key 鉴权，见 [架构文档](./architecture-api-cluster-nacos-redis.md)）。
 
-**基础 URL**: `http://localhost:3000/api`
-
+**基础 URL（对内）**: `http://localhost:3000/api`  
+**开放 API**: `http://localhost:3000/open/v1`  
 **Swagger 文档**: `http://localhost:3000/api/docs`
 
 ---
@@ -21,9 +21,11 @@
   "code": 0,
   "message": "success",
   "data": { ... },
-  "timestamp": 1706345678901
+  "timestamp": "2025-02-16T12:00:00.000Z"
 }
 ```
+
+（`timestamp` 为 ISO-8601 字符串。）
 
 ### 状态码
 

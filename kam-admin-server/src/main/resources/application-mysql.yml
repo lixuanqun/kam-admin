@@ -1,0 +1,9 @@
+# MySQL 配置（profile: mysql），覆盖主配置中的 DataSource 排除
+spring:
+  autoconfigure:
+    exclude: []  # 启用 DataSource 自动配置
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/kamailio?useUnicode=true&characterEncoding=utf8}
+    username: ${SPRING_DATASOURCE_USERNAME:kamailio}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver

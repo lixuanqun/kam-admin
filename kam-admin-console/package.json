@@ -1,0 +1,37 @@
+{
+  "name": "kamailio-dashboard",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@arco-design/web-vue": "^2.56.3",
+    "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
+    "mitt": "^3.0.1",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.3.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/nprogress": "^0.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-vue": "^10.7.0",
+    "less": "^4.2.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7",
+    "vue-eslint-parser": "^10.2.0",
+    "vue-tsc": "^2.2.0"
+  }
+}

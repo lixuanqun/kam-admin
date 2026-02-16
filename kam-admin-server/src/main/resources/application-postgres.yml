@@ -1,0 +1,9 @@
+# PostgreSQL 配置（profile: postgres）
+spring:
+  autoconfigure:
+    exclude: []  # 启用 DataSource 自动配置
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/kamailio}
+    username: ${SPRING_DATASOURCE_USERNAME:kamailio}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: org.postgresql.Driver

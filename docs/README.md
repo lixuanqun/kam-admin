@@ -14,7 +14,7 @@
 
 ## 项目概述
 
-Kamailio Dashboard 是一个基于 **NestJS + Arco Design Pro Vue** 的全栈管理后台项目，用于可视化管理 Kamailio SIP 服务器的配置、数据库和运行状态。
+Kamailio Dashboard 是一个基于 **Spring Boot + Arco Design Vue** 的全栈管理后台项目，用于可视化管理 Kamailio SIP 服务器的配置、数据库和运行状态。
 
 ### 主要功能
 
@@ -29,12 +29,11 @@ Kamailio Dashboard 是一个基于 **NestJS + Arco Design Pro Vue** 的全栈管
 
 | 层级 | 技术 |
 |------|------|
-| 后端框架 | NestJS 10.x |
-| 数据库 | MySQL 5.7+ / MariaDB |
-| ORM | TypeORM |
+| 后端框架 | Spring Boot 3.x (JDK 21) |
+| 数据库 | MySQL 5.7+ / MariaDB / PostgreSQL |
+| ORM | Spring Data JPA |
 | 前端框架 | Vue 3 + Vite |
 | UI 组件 | Arco Design Vue |
-| 前端模板 | Arco Design Pro Vue |
 
 ---
 
@@ -42,9 +41,9 @@ Kamailio Dashboard 是一个基于 **NestJS + Arco Design Pro Vue** 的全栈管
 
 ### 环境要求
 
-- Node.js >= 18.0.0
-- npm >= 8.0.0
-- MySQL 5.7+ 或 MariaDB 10.x
+- JDK 21（后端）
+- Node.js >= 18.0.0（前端）
+- MySQL 5.7+ / MariaDB / PostgreSQL
 - Kamailio 5.x (已配置 JSONRPC 模块)
 
 ### 1. 克隆项目
@@ -54,28 +53,25 @@ git clone https://github.com/lixuanqun/kam-admin.git
 cd kam-admin
 ```
 
-### 2. 配置后端
+### 2. 配置并启动后端 (kam-admin-server)
 
 ```bash
-cd backend
+# 构建（根目录执行）
+npm run backend:build
+# 或：mvn clean package -pl kam-admin-server -am -DskipTests
 
-# 复制环境变量配置
-cp .env.example .env
-
-# 编辑配置文件
-vim .env
+# 启动（根目录执行，配置见 application.yml 或环境变量）
+npm run backend:run
+# 或：mvn spring-boot:run -pl kam-admin-server
 ```
 
-配置 `.env` 文件：
+或使用 `application.yml` / `application-postgres.yml` / 环境变量配置数据库与 Kamailio RPC，例如：
 
 ```env
-# 数据库配置
-DB_HOST=localhost
-DB_PORT=3306
-DB_USERNAME=kamailio
-DB_PASSWORD=kamailiorw
-DB_DATABASE=kamailio
-DB_LOGGING=false
+# 数据库（示例）
+SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/kamailio
+SPRING_DATASOURCE_USERNAME=kamailio
+SPRING_DATASOURCE_PASSWORD=kamailiorw
 
 # Kamailio RPC 配置
 KAMAILIO_RPC_HOST=localhost
@@ -86,30 +82,32 @@ KAMAILIO_RPC_PATH=/RPC
 PORT=3000
 ```
 
-安装依赖并启动：
+### 3. 配置前端 (kam-admin-console)
 
 ```bash
-npm install
-npm run start:dev
-```
-
-### 3. 配置前端
-
-```bash
-cd frontend
-
-# 安装依赖
-npm install
-
-# 启动开发服务器
-npm run dev
+# 仅前端子工程使用 pnpm
+cd kam-admin-console
+pnpm install
+pnpm dev
 ```
 
 ### 4. 访问系统
 
-- 前端地址: http://localhost:5666
-- 后端 API: http://localhost:3000
-- Swagger 文档: http://localhost:3000/api/docs
+- **Docker 环境**：http://localhost:80（Nginx 统一入口，前端 + API）
+- **本地开发**：前端 http://localhost:5666，后端 http://localhost:3000
+- Swagger 文档: http://localhost:3000/api/docs 或 http://localhost/api/docs
+
+### 5. 使用 Docker Compose 一键启动全栈（推荐）
+
+```bash
+docker compose up -d
+# 或：npm run docker:up
+```
+
+包含：**Nginx**（前端+代理）、**kam-admin-server**、**MySQL**、**Redis**、**Kamailio**、**RTPengine**。访问 http://localhost:80 即可使用。首次启动会自动初始化 MySQL 与 Kamailio schema。
+
+- 详细说明：[docker/README.md](../docker/README.md)
+- 架构与配置：[docker-architecture.md](./docker-architecture.md)
 
 ---
 
@@ -117,25 +115,25 @@ npm run dev
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                  前端 (Arco Design Pro Vue)                    │
-│                    http://localhost:5666                      │
+│              前端 (kam-admin-console / Arco Design Vue)      │
+│                    http://localhost:5666                    │
 └─────────────────────────┬───────────────────────────────────┘
                           │ HTTP/REST API
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                      后端 (NestJS)                            │
-│                    http://localhost:3000                      │
+│              后端 (kam-admin-server / Spring Boot 3)         │
+│                    http://localhost:3000                    │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │  业务模块   │  │  公共服务   │  │   Kamailio RPC      │  │
-│  │  Controllers│  │  Services   │  │   Service           │  │
+│  │  业务模块   │  │  配置/鉴权   │  │   Kamailio RPC      │  │
+│  │  Controllers│  │  Nacos/Redis │  │   (KamailioRpcSvc)  │  │
 │  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘  │
 └─────────┼────────────────┼────────────────────┼─────────────┘
           │                │                    │
           ▼                ▼                    ▼
-┌─────────────────┐  ┌──────────────────────────────────────┐
-│   MySQL/MariaDB │  │           Kamailio SIP Server        │
-│   (kamailio db) │  │         (JSONRPC Interface)          │
-└─────────────────┘  └──────────────────────────────────────┘
+┌─────────────────┐  ┌─────────────┐  ┌──────────────────────┐
+│ MySQL/PostgreSQL│  │ Redis/Nacos │  │   Kamailio SIP Server  │
+│  (kamailio db)  │  │ (可选)      │  │   (JSONRPC Interface)  │
+└─────────────────┘  └─────────────┘  └──────────────────────┘
 ```
 
 ---
@@ -166,14 +164,14 @@ http://localhost:3000/api/docs
 
 ### API 响应格式
 
-所有 API 返回统一格式：
+所有 API 返回统一格式（`timestamp` 为 ISO-8601 字符串）：
 
 ```json
 {
   "code": 0,
   "message": "success",
   "data": { ... },
-  "timestamp": 1706345678901
+  "timestamp": "2025-02-16T12:00:00.000Z"
 }
 ```
 
@@ -203,6 +201,17 @@ http://localhost:3000/api/docs
 
 ## 配置说明
 
+### Docker 环境变量
+
+使用 Docker Compose 时，可通过根目录 `.env` 或 `docker-compose.override.yml` 覆盖配置。示例见根目录 [.env.example](../.env.example)。
+
+| 变量 | 说明 | 默认 |
+|------|------|------|
+| `SPRING_DATASOURCE_*` | 数据库连接 | mysql:3306/kamailio |
+| `KAMAILIO_RPC_HOST` | Kamailio 地址 | kamailio |
+| `REDIS_HOST` | Redis 地址 | redis |
+| `PORT` | 应用端口 | 3000 |
+
 ### Kamailio JSONRPC 配置
 
 在 `kamailio.cfg` 中添加以下配置启用 JSONRPC：
@@ -230,14 +239,15 @@ event_route[xhttp:request] {
 
 ### 数据库配置
 
-确保 Kamailio 数据库已创建并初始化：
+确保 Kamailio 数据库已创建并初始化。本仓库 **sql/** 目录汇总了相关 SQL 与说明（[sql/README.md](../sql/README.md)）：
 
 ```bash
 # 使用 kamdbctl 创建数据库
 kamdbctl create
 
-# 或手动导入 SQL
+# 或手动导入 SQL（Kamailio 官方 schema 可从安装路径或 sql/kamailio-mysql/ 获取）
 mysql -u root -p kamailio < /usr/share/kamailio/mysql/standard-create.sql
+# 本模块：sql/01-database-user.sql、sql/02-kam-admin-mysql.sql
 ```
 
 ---
