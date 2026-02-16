@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.dialog.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -29,7 +30,7 @@ public class DialogService {
 
     public Object getActiveDialogs() {
         try {
-            return kamailioRpc.getDialogList().block();
+            return kamailioRpc.getDialogList().block(RpcTimeouts.DEFAULT_BLOCK);
         } catch (Exception e) {
             return new Object[0];
         }
@@ -37,7 +38,7 @@ public class DialogService {
 
     public Object getDialogStats() {
         try {
-            return kamailioRpc.getDialogCount().block();
+            return kamailioRpc.getDialogCount().block(RpcTimeouts.DEFAULT_BLOCK);
         } catch (Exception e) {
             Map<String, Object> m = new HashMap<>();
             m.put("active", 0);
@@ -46,15 +47,15 @@ public class DialogService {
     }
 
     public void endDialog(int hashEntry, int hashId) {
-        kamailioRpc.endDialog(hashEntry, hashId).block();
+        kamailioRpc.endDialog(hashEntry, hashId).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Object getDialogDetail(int hashEntry, int hashId) {
-        return kamailioRpc.getDialogDetail(hashEntry, hashId).block();
+        return kamailioRpc.getDialogDetail(hashEntry, hashId).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void bridgeDialog(String from, String to) {
-        kamailioRpc.bridgeDialog(from, to).block();
+        kamailioRpc.bridgeDialog(from, to).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Map<String, Object> getStats() {

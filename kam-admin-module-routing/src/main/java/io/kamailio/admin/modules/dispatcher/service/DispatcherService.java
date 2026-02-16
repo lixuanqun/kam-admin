@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.dispatcher.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -99,15 +100,15 @@ public class DispatcherService {
     }
 
     public void reload() {
-        kamailioRpc.reloadDispatcher().block();
+        kamailioRpc.reloadDispatcher().block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Object getStatus() {
-        return kamailioRpc.getDispatcherList().block();
+        return kamailioRpc.getDispatcherList().block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void setState(String state, Integer group, String address) {
-        kamailioRpc.call("dispatcher.set_state", state, group, address).block();
+        kamailioRpc.call("dispatcher.set_state", state, group, address).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     @SuppressWarnings("unchecked")

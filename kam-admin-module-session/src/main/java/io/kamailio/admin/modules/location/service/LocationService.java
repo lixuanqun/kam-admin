@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.location.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -37,23 +38,23 @@ public class LocationService {
     }
 
     public Object getFromMemory(String table) {
-        return kamailioRpc.getUserLocation(table).block();
+        return kamailioRpc.getUserLocation(table).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void deleteUserLocation(String username, String domain) {
-        kamailioRpc.deleteUserLocation("location", "sip:" + username + "@" + domain).block();
+        kamailioRpc.deleteUserLocation("location", "sip:" + username + "@" + domain).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Object lookupUser(String table, String aor) {
-        return kamailioRpc.lookupUser(table != null ? table : "location", aor).block();
+        return kamailioRpc.lookupUser(table != null ? table : "location", aor).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void deleteContact(String table, String aor, String contact) {
-        kamailioRpc.removeContact(table != null ? table : "location", aor, contact).block();
+        kamailioRpc.removeContact(table != null ? table : "location", aor, contact).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void flushUsrloc() {
-        kamailioRpc.flushUsrloc().block();
+        kamailioRpc.flushUsrloc().block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public List<Location> findByUsername(String username) {

@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.rtpengine.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.service.KamailioRpcService;
 import org.springframework.stereotype.Service;
 
@@ -15,23 +16,23 @@ public class RtpengineService {
     }
 
     public Object showAll() {
-        return kamailioRpc.rtpengineShow("all").block();
+        return kamailioRpc.rtpengineShow("all").block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void reload() {
-        kamailioRpc.rtpengineReload().block();
+        kamailioRpc.rtpengineReload().block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void enable(String url, int flag) {
-        kamailioRpc.rtpengineEnable(url, flag).block();
+        kamailioRpc.rtpengineEnable(url, flag).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Object ping(String url) {
-        return kamailioRpc.rtpenginePing(url).block();
+        return kamailioRpc.rtpenginePing(url).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void enableNatPing(int flag) {
-        kamailioRpc.nathelperEnablePing(flag).block();
+        kamailioRpc.nathelperEnablePing(flag).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Map<String, Object> getStatus() {

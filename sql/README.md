@@ -98,3 +98,9 @@ mysql -u root -p kamailio < /usr/share/kamailio/mysql/standard-create.sql
 1. 创建数据库：`CREATE DATABASE kamailio;`
 2. 导入 Kamailio schema：`standard-create.sql` 及所需模块的 `*-create.sql`
 3. 执行本模块：`01-database-user.sql`、`02-kam-admin-mysql.sql`（或 `02-kam-admin-postgres.sql`）
+
+---
+
+## License
+
+[Apache License 2.0](../LICENSE)

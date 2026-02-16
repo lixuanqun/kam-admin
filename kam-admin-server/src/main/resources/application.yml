@@ -43,15 +43,21 @@ auth:
   console:
     method: ${AUTH_CONSOLE_METHOD:SESSION}
 
-# Kamailio RPC
+# Kamailio RPC（超时应用于 WebClient，见 KamailioRpcServiceImpl）
 kamailio:
   rpc:
     host: ${KAMAILIO_RPC_HOST:localhost}
     port: ${KAMAILIO_RPC_PORT:5060}
     path: ${KAMAILIO_RPC_PATH:/RPC}
-    timeout: 10000
+    timeout: ${KAMAILIO_RPC_TIMEOUT:10000}
   kamctl-path: ${KAMAILIO_KAMCTL_PATH:/usr/sbin/kamctl}
   default-domain: ${KAMAILIO_DEFAULT_DOMAIN:localhost}
+
+# 多租户 RPC 客户端缓存（有界 + 访问后过期，避免无界增长）
+kam-admin:
+  tenant-rpc-cache:
+    max-size: ${TENANT_RPC_CACHE_MAX_SIZE:256}
+    expire-minutes: ${TENANT_RPC_CACHE_EXPIRE_MINUTES:30}
 
 # Actuator：K8S 健康检查 /actuator/health、/actuator/health/liveness、/actuator/health/readiness
 management:

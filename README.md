@@ -20,7 +20,7 @@
   <img src="https://img.shields.io/badge/Vue-3.x-green?style=flat-square&logo=vue.js" alt="Vue">
   <img src="https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript" alt="TypeScript">
   <img src="https://img.shields.io/badge/Kamailio-5.x%20%7C%206.x-orange?style=flat-square" alt="Kamailio">
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square" alt="License">
 </p>
 
 ---
@@ -96,4 +96,4 @@ pnpm frontend:dev
 
 ## License
 
-[MIT License](./LICENSE)
+[Apache License 2.0](./LICENSE)

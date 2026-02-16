@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.secfilter.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -42,10 +43,10 @@ public class SecfilterService {
     @Transactional
     public void remove(Integer id) { repository.deleteById(id); }
 
-    public void reload() { kamailioRpc.secfilterReload().block(); }
-    public Object print() { return kamailioRpc.secfilterPrint().block(); }
-    public Object stats() { return kamailioRpc.secfilterStats().block(); }
-    public void statsReset() { kamailioRpc.secfilterStatsReset().block(); }
-    public void addBlacklist(int type, String data) { kamailioRpc.secfilterAddBl(type, data).block(); }
-    public void addWhitelist(int type, String data) { kamailioRpc.secfilterAddWl(type, data).block(); }
+    public void reload() { kamailioRpc.secfilterReload().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object print() { return kamailioRpc.secfilterPrint().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object stats() { return kamailioRpc.secfilterStats().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public void statsReset() { kamailioRpc.secfilterStatsReset().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public void addBlacklist(int type, String data) { kamailioRpc.secfilterAddBl(type, data).block(RpcTimeouts.DEFAULT_BLOCK); }
+    public void addWhitelist(int type, String data) { kamailioRpc.secfilterAddWl(type, data).block(RpcTimeouts.DEFAULT_BLOCK); }
 }

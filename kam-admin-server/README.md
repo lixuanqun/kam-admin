@@ -112,3 +112,7 @@ mvn test -Dtest="*ControllerTest"
 | 响应格式 | { code, message, data, timestamp } | 一致 |
 | 分页 | page, limit, keyword | 一致 |
 | Swagger | /api/docs | /api/docs |
+
+## License
+
+[Apache License 2.0](../LICENSE)

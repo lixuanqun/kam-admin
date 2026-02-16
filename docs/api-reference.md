@@ -4,9 +4,9 @@
 
 本文档提供 Kamailio Dashboard 后端 API 的完整参考。后端为 **kam-admin-server**（Spring Boot 3），对内管理 API 前缀为 `/api`，对外开放 API 前缀为 `/open/v1`（需 API Key 鉴权，见 [架构文档](./architecture-api-cluster-nacos-redis.md)）。
 
-**基础 URL（对内）**: `http://localhost:3000/api`  
-**开放 API**: `http://localhost:3000/open/v1`  
-**Swagger 文档**: `http://localhost:3000/api/docs`
+**基础 URL（对内）**: `http://localhost:3000/api`（直连后端）或 `http://localhost/api`（经 Nginx 代理）  
+**开放 API**: `http://localhost:3000/open/v1` 或 `http://localhost/open/v1`  
+**Swagger 文档**: `http://localhost:3000/api/docs` 或 `http://localhost/api/docs`
 
 ---
 

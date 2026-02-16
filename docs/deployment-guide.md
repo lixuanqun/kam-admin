@@ -4,6 +4,9 @@
 
 本文档介绍如何在生产环境部署 Kamailio Dashboard。
 
+**开发/演示**：推荐直接使用 [Docker Compose](../docker-compose.yml) 或 [Docker 架构说明](./docker-architecture.md) 一键启动全栈（Nginx + 后端 + MySQL + Redis + Kamailio + RTPengine）。  
+**生产**：可按下文进行 JAR 部署、Nginx 配置与 K8S 部署（见 [k8s-deployment-guide.md](./k8s-deployment-guide.md)）。
+
 ---
 
 ## 1. 环境要求
@@ -22,11 +25,11 @@
 |------|------|------|
 | JDK | 21 | 后端 kam-admin-server |
 | Maven | 3.8+ | 构建后端 |
-| Node.js | >= 18.0.0 | 前端 kam-admin-console |
-| pnpm | 9.x | 前端依赖管理 |
+| Node.js | >= 18.0.0 | 仅前端子工程 kam-admin-console 构建时需要 |
+| pnpm | 9.x | 仅 kam-admin-console 内使用 |
 | MySQL/MariaDB/PostgreSQL | 5.7+ / 10.x / 12+ | 业务数据库 |
 | Kamailio | 5.x / 6.x | 需启用 JSONRPC |
-| Nginx | 1.18+ | 可选，反向代理与静态资源 |
+| Nginx | 1.18+ | 生产环境反向代理与静态资源（或使用 Docker 内 Nginx） |
 
 ---
 

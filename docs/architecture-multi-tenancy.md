@@ -26,22 +26,29 @@
 
 ## 三、数据隔离模式
 
-### 3.1 模式 A：租户独立数据源（推荐）
+### 3.1 当前实现状态（必读）
+
+- **已实现**：**按租户 RPC 隔离**。请求进入后根据 TenantContext 选择该租户的 `rpc_url`，通过 **TenantAwareKamailioRpcService** 路由到对应 Kamailio 实例的 JSON-RPC；未配置 `rpc_url` 的租户使用全局默认 RPC。
+- **未实现**：**按租户切换数据源**。当前 **DataSource 为单实例共享**，所有租户共用同一数据库（同一 schema），未根据 `tenant` 表的 `db_url` 或 schema 做动态 DataSource 路由。
+- 因此现阶段为「**RPC 多租户 + 共享库**」；若需模式 A 的完整数据隔离（每租户独立 DB/schema），需在后续迭代中实现按 TenantContext 的 DataSource 路由与连接池管理。
+
+### 3.2 模式 A：租户独立数据源（目标架构）
 
 - 每个租户配置自己的 **Kamailio RPC 地址** 与 **数据库连接**（或共用 DB 但不同 **schema**）。
 - 应用内无 `tenant_id` 列：同一张表在不同租户的 DB/schema 中各有一份。
 - **优点**：隔离彻底、与 Kamailio 官方表结构一致、可对接“一租户一 Kamailio 实例”。
 - **缺点**：需维护租户→连接映射，动态 DataSource/RPC 客户端略复杂。
 
-### 3.2 模式 B：共享库 + tenant_id
+### 3.3 模式 B：共享库 + tenant_id
 
 - 单库单 schema，业务表增加 **tenant_id**，所有查询带 `WHERE tenant_id = ?`。
 - **优点**：实现简单、易做跨租户统计。
 - **缺点**：需改 Kamailio 相关表或仅对“应用自有表”加 tenant_id；若 Kamailio 表不改，则无法用此模式隔离 Kamailio 数据。
 
-### 3.3 建议
+### 3.4 建议
 
-- **默认采用模式 A**：租户表 `tenant` 中可配置 `rpc_url`、`db_url`（或 schema），请求时根据 TenantContext 选择对应数据源与 RPC。
+- **当前**：保持「RPC 按租户、DB 共享」；租户表 `tenant` 中可配置 `rpc_url`，`db_url` 保留为扩展字段。
+- **后续**：若需模式 A，再实现按 TenantContext 选择 DataSource（或 schema），并做好连接池与健康检查。
 - **应用自有表**（如审计、API Key、配置缓存）可采用模式 B，在表中加 `tenant_id`，与现有鉴权体系结合。
 
 ---

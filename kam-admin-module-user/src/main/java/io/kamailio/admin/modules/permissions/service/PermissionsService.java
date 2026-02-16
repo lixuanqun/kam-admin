@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.permissions.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -117,19 +118,19 @@ public class PermissionsService {
     }
 
     public void reload() {
-        kamailioRpc.reloadPermissions().block();
+        kamailioRpc.reloadPermissions().block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public void reloadTrusted() {
-        kamailioRpc.call("permissions.trustedReload").block();
+        kamailioRpc.call("permissions.trustedReload").block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Object addressDump() {
-        return kamailioRpc.call("permissions.addressDump").block();
+        return kamailioRpc.call("permissions.addressDump").block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Object subnetDump() {
-        return kamailioRpc.call("permissions.subnetDump").block();
+        return kamailioRpc.call("permissions.subnetDump").block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Map<String, Object> getStats() {

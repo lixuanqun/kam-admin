@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.pdt.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -42,6 +43,6 @@ public class PdtService {
     @Transactional
     public void remove(Integer id) { repository.deleteById(id); }
 
-    public void reload() { kamailioRpc.pdtReload().block(); }
-    public Object list() { return kamailioRpc.pdtList().block(); }
+    public void reload() { kamailioRpc.pdtReload().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object list() { return kamailioRpc.pdtList().block(RpcTimeouts.DEFAULT_BLOCK); }
 }

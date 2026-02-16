@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.lcr.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -109,7 +110,7 @@ public class LcrService {
     @Transactional
     public void removeTarget(Integer id) { targetRepository.deleteById(id); }
 
-    public void reload() { kamailioRpc.lcrReload().block(); }
-    public Object dumpGws() { return kamailioRpc.lcrDumpGws().block(); }
-    public Object dumpRules() { return kamailioRpc.lcrDumpRules().block(); }
+    public void reload() { kamailioRpc.lcrReload().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object dumpGws() { return kamailioRpc.lcrDumpGws().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object dumpRules() { return kamailioRpc.lcrDumpRules().block(RpcTimeouts.DEFAULT_BLOCK); }
 }

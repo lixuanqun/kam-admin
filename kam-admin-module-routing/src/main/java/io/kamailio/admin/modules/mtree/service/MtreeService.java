@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.mtree.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -50,7 +51,7 @@ public class MtreeService {
     @Transactional
     public void remove(Integer id) { repository.deleteById(id); }
 
-    public void reload(String tname) { kamailioRpc.mtreeReload(tname).block(); }
-    public Object match(String tname, String prefix) { return kamailioRpc.mtreeMatch(tname, prefix).block(); }
-    public Object summary(String tname) { return kamailioRpc.mtreeSummary(tname).block(); }
+    public void reload(String tname) { kamailioRpc.mtreeReload(tname).block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object match(String tname, String prefix) { return kamailioRpc.mtreeMatch(tname, prefix).block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object summary(String tname) { return kamailioRpc.mtreeSummary(tname).block(RpcTimeouts.DEFAULT_BLOCK); }
 }

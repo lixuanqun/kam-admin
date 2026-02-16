@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.drouting.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -137,9 +138,9 @@ public class DroutingService {
         carrierRepository.delete(carrierRepository.findById(id).orElseThrow(() -> new RuntimeException("运营商不存在")));
     }
 
-    public void reload() { kamailioRpc.droutingReload().block(); }
-    public Object getGwStatus() { return kamailioRpc.droutingGwStatus().block(); }
-    public Object getCarrierStatus() { return kamailioRpc.droutingCarrierStatus().block(); }
+    public void reload() { kamailioRpc.droutingReload().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object getGwStatus() { return kamailioRpc.droutingGwStatus().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object getCarrierStatus() { return kamailioRpc.droutingCarrierStatus().block(RpcTimeouts.DEFAULT_BLOCK); }
     public Map<String, Object> getStats() {
         return Map.of(
                 "gateways", gatewayRepository.count(),

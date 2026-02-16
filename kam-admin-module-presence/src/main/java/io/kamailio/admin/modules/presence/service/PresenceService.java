@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.presence.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -40,10 +41,10 @@ public class PresenceService {
         return new PaginatedResult<>(page.getContent(), page.getTotalElements(), dto.pageOrDefault(), dto.limitOrDefault());
     }
 
-    public void cleanExpired() { kamailioRpc.presenceCleanup().block(); }
+    public void cleanExpired() { kamailioRpc.presenceCleanup().block(RpcTimeouts.DEFAULT_BLOCK); }
 
     public void refreshWatchers(String presentityUri, String event) {
-        kamailioRpc.presenceRefreshWatchers(presentityUri, event).block();
+        kamailioRpc.presenceRefreshWatchers(presentityUri, event).block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Map<String, Object> getStats() {

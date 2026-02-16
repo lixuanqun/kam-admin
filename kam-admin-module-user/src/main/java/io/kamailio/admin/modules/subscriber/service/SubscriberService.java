@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.subscriber.service;
 
+import io.kamailio.admin.common.exception.BusinessException;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.modules.subscriber.dto.CreateSubscriberDto;
@@ -49,7 +50,7 @@ public class SubscriberService {
     @Transactional
     public Subscriber create(CreateSubscriberDto dto) {
         if (repository.findByUsernameAndDomain(dto.getUsername(), dto.getDomain()).isPresent()) {
-            throw new RuntimeException("用户已存在");
+            throw new BusinessException("用户已存在");
         }
         var s = new Subscriber();
         s.setUsername(dto.getUsername());
@@ -74,11 +75,11 @@ public class SubscriberService {
     }
 
     public Subscriber findOne(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("用户不存在"));
+        return repository.findById(id).orElseThrow(() -> new BusinessException("用户不存在"));
     }
 
     public Subscriber findByUsernameAndDomain(String username, String domain) {
-        return repository.findByUsernameAndDomain(username, domain).orElseThrow(() -> new RuntimeException("用户不存在"));
+        return repository.findByUsernameAndDomain(username, domain).orElseThrow(() -> new BusinessException("用户不存在"));
     }
 
     @Transactional

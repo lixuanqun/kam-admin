@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.msilo.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -55,5 +56,5 @@ public class MsiloService {
         return result;
     }
 
-    public void dump() { kamailioRpc.msiloDump().block(); }
+    public void dump() { kamailioRpc.msiloDump().block(RpcTimeouts.DEFAULT_BLOCK); }
 }

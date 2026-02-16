@@ -1,5 +1,7 @@
 package io.kamailio.admin.modules.domain.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
+import io.kamailio.admin.common.exception.BusinessException;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -32,7 +34,7 @@ public class DomainService {
     @Transactional
     public Domain create(CreateDomainDto dto) {
         if (repository.findByDomain(dto.getDomain()).isPresent())
-            throw new RuntimeException("域已存在");
+            throw new BusinessException("域已存在");
         var d = new Domain();
         d.setDomain(dto.getDomain());
         d.setDid(dto.getDid());
@@ -54,7 +56,7 @@ public class DomainService {
     }
 
     public Domain findOne(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("域不存在"));
+        return repository.findById(id).orElseThrow(() -> new BusinessException("域不存在"));
     }
 
     @Transactional
@@ -74,10 +76,10 @@ public class DomainService {
     }
 
     public void reload() {
-        kamailioRpc.reloadDomain().block();
+        kamailioRpc.reloadDomain().block(RpcTimeouts.DEFAULT_BLOCK);
     }
 
     public Object dump() {
-        return kamailioRpc.call("domain.dump").block();
+        return kamailioRpc.call("domain.dump").block(RpcTimeouts.DEFAULT_BLOCK);
     }
 }

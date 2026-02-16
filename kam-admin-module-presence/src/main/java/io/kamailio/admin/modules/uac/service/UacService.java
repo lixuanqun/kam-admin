@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.uac.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -53,8 +54,8 @@ public class UacService {
     @Transactional
     public void remove(Integer id) { uacRegRepository.deleteById(id); }
 
-    public void reload() { kamailioRpc.uacRegReload().block(); }
-    public Object getInfo(String lUuid) { return kamailioRpc.uacRegInfo(lUuid).block(); }
-    public void refresh(String lUuid) { kamailioRpc.uacRegRefresh(lUuid).block(); }
-    public Object dumpList() { return kamailioRpc.uacRegDump().block(); }
+    public void reload() { kamailioRpc.uacRegReload().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object getInfo(String lUuid) { return kamailioRpc.uacRegInfo(lUuid).block(RpcTimeouts.DEFAULT_BLOCK); }
+    public void refresh(String lUuid) { kamailioRpc.uacRegRefresh(lUuid).block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object dumpList() { return kamailioRpc.uacRegDump().block(RpcTimeouts.DEFAULT_BLOCK); }
 }

@@ -1,5 +1,6 @@
 package io.kamailio.admin.modules.dialplan.service;
 
+import io.kamailio.admin.common.RpcTimeouts;
 import io.kamailio.admin.common.dto.PaginatedResult;
 import io.kamailio.admin.common.dto.PaginationDto;
 import io.kamailio.admin.common.service.KamailioRpcService;
@@ -47,7 +48,7 @@ public class DialplanService {
     @Transactional
     public void remove(Integer id) { repository.deleteById(id); }
 
-    public void reload() { kamailioRpc.dialplanReload().block(); }
-    public Object translate(int dpid, String input) { return kamailioRpc.dialplanTranslate(dpid, input).block(); }
-    public Object dump(Integer dpid) { return kamailioRpc.dialplanDump(dpid).block(); }
+    public void reload() { kamailioRpc.dialplanReload().block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object translate(int dpid, String input) { return kamailioRpc.dialplanTranslate(dpid, input).block(RpcTimeouts.DEFAULT_BLOCK); }
+    public Object dump(Integer dpid) { return kamailioRpc.dialplanDump(dpid).block(RpcTimeouts.DEFAULT_BLOCK); }
 }

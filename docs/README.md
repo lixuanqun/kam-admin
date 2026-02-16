@@ -1,5 +1,21 @@
 # Kamailio Dashboard 使用文档
 
+## 文档导航
+
+| 类型 | 文档 | 说明 |
+|------|------|------|
+| **入门** | 本文档 | 快速开始、架构、配置、常见问题 |
+| **结构** | [project-structure.md](./project-structure.md) | 工程结构、模块职责、构建命令 |
+| **部署** | [deployment-guide.md](./deployment-guide.md) | 生产部署（JAR、Nginx、systemd） |
+| **Docker** | [docker-architecture.md](./docker-architecture.md) | Docker 全栈架构与配置 |
+| **K8S** | [k8s-deployment-guide.md](./k8s-deployment-guide.md) | Kubernetes 部署 |
+| **API** | [api-reference.md](./api-reference.md) | 接口说明与 Swagger |
+| **领域** | [domain-modeling-and-subdomains.md](./domain-modeling-and-subdomains.md) | 子域划分与领域建模 |
+| **操作** | [user-guide.md](./user-guide.md) [routing-guide.md](./routing-guide.md) [monitoring-guide.md](./monitoring-guide.md) [system-guide.md](./system-guide.md) | 各功能操作手册 |
+| **参考** | [kamailio-skill.md](./kamailio-skill.md) [arco-design-vue-skill.md](./arco-design-vue-skill.md) | Kamailio / 前端开发参考 |
+
+---
+
 ## 目录
 
 1. [项目概述](#项目概述)
@@ -38,6 +54,8 @@ Kamailio Dashboard 是一个基于 **Spring Boot + Arco Design Vue** 的全栈�
 ---
 
 ## 快速开始
+
+**推荐**：使用 Docker 一键启动全栈（Nginx + 后端 + MySQL + Redis + Kamailio + RTPengine），见 [Docker 架构说明](./docker-architecture.md)。以下为本地开发方式。
 
 ### 环境要求
 
@@ -113,16 +131,18 @@ docker compose up -d
 
 ## 系统架构
 
+本地开发时前端与后端分端口；Docker 部署时由 Nginx :80 统一入口（见 [docker-architecture.md](./docker-architecture.md)）。
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              前端 (kam-admin-console / Arco Design Vue)      │
-│                    http://localhost:5666                    │
+│        开发 :5666 | Docker 下由 Nginx :80 提供静态            │
 └─────────────────────────┬───────────────────────────────────┘
                           │ HTTP/REST API
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
 │              后端 (kam-admin-server / Spring Boot 3)         │
-│                    http://localhost:3000                    │
+│        开发 :3000 | Docker 下经 Nginx 代理 /api、/open       │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
 │  │  业务模块   │  │  配置/鉴权   │  │   Kamailio RPC      │  │
 │  │  Controllers│  │  Nacos/Redis │  │   (KamailioRpcSvc)  │  │
@@ -140,10 +160,10 @@ docker compose up -d
 
 ## 功能模块
 
-### 开发技能
+### 开发参考
 
-- [Arco Design Vue 开发技能](./arco-design-vue-skill.md) - 基于官方文档的前端组件库使用总结
-- [Kamailio 配置与知识 SKILL](./kamailio-skill.md) - 基于官方文档的 Kamailio SIP 服务器配置总结
+- [Kamailio 配置与知识](./kamailio-skill.md) - Kamailio SIP 配置参考
+- [Arco Design Vue 开发技能](./arco-design-vue-skill.md) - 前端组件库参考
 
 ### 详细操作手册
 
@@ -280,3 +300,7 @@ A: 检查：
 ## 支持
 
 如有问题，请提交 Issue 或联系开发团队。
+
+## License
+
+[Apache License 2.0](../LICENSE)

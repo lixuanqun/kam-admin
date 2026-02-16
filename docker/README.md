@@ -50,3 +50,7 @@ docker compose up -d
 ## 配置覆盖
 
 根目录创建 `.env`（可参考 `.env.example`）可覆盖默认环境变量。详见 [docs/docker-architecture.md](../docs/docker-architecture.md)。
+
+## License
+
+[Apache License 2.0](../LICENSE)
