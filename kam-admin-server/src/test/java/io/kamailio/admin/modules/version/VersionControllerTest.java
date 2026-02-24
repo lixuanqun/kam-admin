@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(io.kamailio.admin.modules.version.controller.VersionController.class)
 class VersionControllerTest extends ControllerTestBase {
@@ -20,7 +21,7 @@ class VersionControllerTest extends ControllerTestBase {
 
     @Test
     void list_returnsOkWithCode0() throws Exception {
-        when(service.list()).thenReturn(List.of());
+        when(service.findAll()).thenReturn(List.of());
         ResultActions actions = mockMvc.perform(get("/api/version"));
         expectSuccess(actions).andExpect(jsonPath("$.data").isArray());
     }

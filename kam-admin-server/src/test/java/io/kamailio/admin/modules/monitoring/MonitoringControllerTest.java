@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(io.kamailio.admin.modules.monitoring.controller.MonitoringController.class)
 class MonitoringControllerTest extends ControllerTestBase {
@@ -20,7 +21,7 @@ class MonitoringControllerTest extends ControllerTestBase {
 
     @Test
     void health_returnsOkWithCode0() throws Exception {
-        when(service.health()).thenReturn(Map.of("status", "ok"));
+        when(service.checkHealth()).thenReturn(Map.of("status", "ok"));
         ResultActions actions = mockMvc.perform(get("/api/monitoring/health"));
         expectSuccess(actions).andExpect(jsonPath("$.data.status").value("ok"));
     }

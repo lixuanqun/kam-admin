@@ -14,6 +14,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(io.kamailio.admin.modules.drouting.controller.DroutingController.class)
 class DroutingControllerTest extends ControllerTestBase {
