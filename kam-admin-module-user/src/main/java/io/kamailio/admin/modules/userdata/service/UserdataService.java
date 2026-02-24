@@ -67,6 +67,9 @@ public class UserdataService {
         return grpRepository.save(item);
     }
 
+    @Transactional
+    public void removeGroup(Integer id) { grpRepository.deleteById(id); }
+
     public PaginatedResult<SpeedDial> findAllSpeedDials(PaginationDto dto) {
         var page = dto.getKeyword() != null && !dto.getKeyword().isBlank()
                 ? speedDialRepository.findByUsernameContaining(dto.getKeyword(), PageRequest.of(dto.pageOrDefault() - 1, dto.limitOrDefault(), Sort.by("id")))

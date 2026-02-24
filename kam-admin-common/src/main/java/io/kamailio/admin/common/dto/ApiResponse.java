@@ -38,11 +38,11 @@ public class ApiResponse<T> {
         return success(null, "Success");
     }
 
-    public static ApiResponse<Void> error(String message) {
+    public static <T> ApiResponse<T> error(String message) {
         return error(message, -1);
     }
 
-    public static ApiResponse<Void> error(String message, int code) {
+    public static <T> ApiResponse<T> error(String message, int code) {
         return new ApiResponse<>(code, message, null);
     }
 

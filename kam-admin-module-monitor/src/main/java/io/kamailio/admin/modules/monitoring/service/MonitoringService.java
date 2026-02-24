@@ -70,7 +70,8 @@ public class MonitoringService {
         try {
             Object count = kamailioRpc.getDialogCount().block(RpcTimeouts.DEFAULT_BLOCK);
             Object dialogs = kamailioRpc.getDialogList().block(RpcTimeouts.DEFAULT_BLOCK);
-            int c = count instanceof Map ? (Integer) ((Map<?, ?>) count).getOrDefault("active", 0) : 0;
+            int c = 0;
+            if (count instanceof Map<?, ?> m) { Object v = m.get("active"); if (v instanceof Number n) c = n.intValue(); }
             return Map.of("count", c, "dialogs", dialogs != null ? dialogs : List.of());
         } catch (Exception e) {
             return Map.of("count", 0, "dialogs", List.of());
@@ -103,7 +104,7 @@ public class MonitoringService {
         int activeDialogs = 0;
         try {
             Object dc = kamailioRpc.getDialogCount().block(RpcTimeouts.DEFAULT_BLOCK);
-            if (dc instanceof Map) activeDialogs = ((Number) ((Map<?, ?>) dc).getOrDefault("active", 0)).intValue();
+            if (dc instanceof Map<?, ?> m) { Object v = m.get("active"); if (v instanceof Number n) activeDialogs = n.intValue(); }
         } catch (Exception ignored) {}
         return Map.of(
                 "kamailio", Map.of("status", health.get("status"), "version", health.get("version"), "uptime", health.get("uptime")),

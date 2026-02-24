@@ -22,6 +22,18 @@
             <artifactId>kam-admin-common</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.kamailio</groupId>
+            <artifactId>kam-admin-module-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.kamailio</groupId>
+            <artifactId>kam-admin-module-session</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.kamailio</groupId>
+            <artifactId>kam-admin-module-routing</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
