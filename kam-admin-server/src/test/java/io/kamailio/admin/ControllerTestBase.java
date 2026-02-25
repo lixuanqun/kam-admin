@@ -1,8 +1,10 @@
 package io.kamailio.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.kamailio.admin.tenant.TenantResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -21,6 +23,9 @@ public abstract class ControllerTestBase {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @MockBean
+    protected TenantResolver tenantResolver;
 
     protected ResultActions expectSuccess(ResultActions actions) throws Exception {
         return actions

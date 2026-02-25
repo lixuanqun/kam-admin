@@ -18,7 +18,7 @@ class SystemControllerTest extends ControllerTestBase {
 
     @Test
     void getCoreInfo_returnsOkWithCode0() throws Exception {
-        when(service.getCoreInfo()).thenReturn(new Object());
+        when(service.getCoreInfo()).thenReturn(java.util.Map.of("version", "test"));
         ResultActions actions = mockMvc.perform(get("/api/system/core-info"));
         expectSuccess(actions);
     }

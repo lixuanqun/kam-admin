@@ -26,7 +26,7 @@ class PermissionsControllerTest extends ControllerTestBase {
     void findAllAddresses_returnsOkWithCode0() throws Exception {
         when(service.findAllAddresses(any(PaginationDto.class)))
                 .thenReturn(new PaginatedResult<>(List.of(), 0L, 1, 20));
-        ResultActions actions = mockMvc.perform(get("/api/permissions/addresses").param("page", "1").param("limit", "20"));
+        ResultActions actions = mockMvc.perform(get("/api/permissions/address").param("page", "1").param("limit", "20"));
         expectSuccess(actions).andExpect(jsonPath("$.data.items").isArray());
     }
 }
