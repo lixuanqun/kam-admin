@@ -4,6 +4,7 @@ import io.kamailio.admin.common.service.KamailioRpcService;
 import io.kamailio.admin.config.KamailioProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -22,6 +23,7 @@ public class KamailioRpcServiceImpl implements KamailioRpcService {
     private final WebClient webClient;
     private final AtomicInteger requestId = new AtomicInteger(0);
 
+    @Autowired
     public KamailioRpcServiceImpl(KamailioProperties properties) {
         var rpc = properties.getRpc();
         String baseUrl = "http://" + rpc.getHost() + ":" + rpc.getPort() + rpc.getPath();
